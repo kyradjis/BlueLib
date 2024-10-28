@@ -61,11 +61,11 @@
         <tbody>
           <tr>
             <td>1.20.x</td>
-            <td>Active</td>
+            <td>Forge Error</td>
           </tr>
           <tr>
             <td>1.21.x</td>
-            <td>Active</td>
+            <td>Forge Error</td>
           </tr>
         </tbody>
       </table>
