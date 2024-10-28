@@ -41,11 +41,11 @@
         <tbody>
           <tr>
             <td>1.20.x</td>
-            <td>Active</td>
+            <td>Forge Error</td>
           </tr>
           <tr>
             <td>1.21.x</td>
-            <td>Active</td>
+            <td>Forge Error</td>
           </tr>
         </tbody>
       </table>
@@ -61,11 +61,11 @@
         <tbody>
           <tr>
             <td>1.20.x</td>
-            <td>Forge Error</td>
+            <td>Active</td>
           </tr>
           <tr>
             <td>1.21.x</td>
-            <td>Forge Error</td>
+            <td>Active</td>
           </tr>
         </tbody>
       </table>
