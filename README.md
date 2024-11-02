@@ -91,7 +91,7 @@
 
 <h1 align="center">Sponsored by BisectHosting</h1>
 <h2 align="center">Looking for a server to enjoy with your friends? Unsure how to set one up? Rent a pre-configured server from BisectHosting today!</h2>
-<p align="center">Click the image above for more details.</p>
+<p align="center">Click the image below for more details.</p>
 <p align="center">
   <a href="https://url-shortener.curseforge.com/6XTXg"><img src="https://imgur.com/ciTKuIP.png" alt="Sponsor"/></a>
 </p>
