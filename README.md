@@ -1,8 +1,3 @@
-
-<p align="center">
-  <a href="https://url-shortener.curseforge.com/6XTXg"><img src="https://imgur.com/ciTKuIP.png" alt="Sponsor"/></a>
-</p>
-
 <h1 align="center">BlueLib is an All round Library for Minecraft Mods with Data Driven Features to ensure that anyone can implement this Library and have full freedom over the Features with both Resource and Datapack Support!</h1>
 <h2 align="center">Available for:</h2>
 <table align="center">
@@ -92,4 +87,11 @@
 <a href="https://github.com/MeAlam1/BlueLib" align="center">
   <img align="center" src="https://github-readme-stats.vercel.app/api/pin/?username=MeAlam1&repo=BlueLib&theme=dark#gh-dark-mode-only" />
 </a>
+</p>
+
+<h1 align="center">Sponsored by BisectHosting</h1>
+<h2 align="center">Looking for a server to enjoy with your friends? Unsure how to set one up? Rent a pre-configured server from BisectHosting today!</h2>
+<p align="center">Click the image above for more details.</p>
+<p align="center">
+  <a href="https://url-shortener.curseforge.com/6XTXg"><img src="https://imgur.com/ciTKuIP.png" alt="Sponsor"/></a>
 </p>
