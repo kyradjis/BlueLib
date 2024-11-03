@@ -42,7 +42,7 @@ public class BaseLogger {
     /**
      * A {@code void} to enable or disable {@code BlueLib} specific logging.
      *
-     * @param pEnabled {@link boolean} - Indicates whether to enable or disable BlueLib logging.
+     * @param pEnabled {@link Boolean} - Indicates whether to enable or disable BlueLib logging.
      * @since 1.0.0
      */
     public static void setBlueLibLoggingEnabled(boolean pEnabled) {
@@ -72,7 +72,7 @@ public class BaseLogger {
     /**
      * A {@code void} to enable or disable general logging.
      *
-     * @param pEnabled {@link boolean} - Indicates whether to enable or disable general logging.
+     * @param pEnabled {@link Boolean} - Indicates whether to enable or disable general logging.
      * @since 1.0.0
      */
     public static void setLoggingEnabled(boolean pEnabled) {
@@ -90,7 +90,7 @@ public class BaseLogger {
      * @param pLogLevel  {@link Level} - The logging level to use.
      * @param pMessage   {@link String} - The message to log.
      * @param pThrowable {@link Throwable} - The throwable to log with the message.
-     * @param pIsBlueLib {@link boolean} - Indicates if the message is {@code BlueLib} specific.
+     * @param pIsBlueLib {@link Boolean} - Indicates if the message is {@code BlueLib} specific.
      * @since 1.0.0
      */
     public static void log(Level pLogLevel, String pMessage, Throwable pThrowable, boolean pIsBlueLib) {
@@ -108,7 +108,7 @@ public class BaseLogger {
      *
      * @param pLogLevel  {@link Level} - The logging level to use.
      * @param pMessage   {@link String} - The message to log.
-     * @param pIsBlueLib {@link boolean} - Indicates if the message is {@code BlueLib} specific.
+     * @param pIsBlueLib {@link Boolean} - Indicates if the message is {@code BlueLib} specific.
      * @since 1.0.0
      */
     public static void log(Level pLogLevel, String pMessage, boolean pIsBlueLib) {

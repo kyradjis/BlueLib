@@ -55,7 +55,7 @@ public class JSONMerger {
                         targetArray.add(element);
                     }
 
-                    BaseLogger.log(BaseLogLevel.ERROR, "Merged array for key: " + key, true);
+                    BaseLogger.log(BaseLogLevel.INFO, "Merged array for key: " + key, true);
                 } else {
                     pTarget.add(key, sourceElement);
                     BaseLogger.log(BaseLogLevel.WARNING, "Overwriting value for key: " + key, true);

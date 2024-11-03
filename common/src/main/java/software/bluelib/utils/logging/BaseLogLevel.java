@@ -23,18 +23,6 @@ import java.util.logging.Level;
 public class BaseLogLevel {
 
     /**
-     * Private constructor to prevent instantiation.
-     * <p>
-     * This constructor is intentionally empty to prevent creating instances of this class.
-     * </p>
-     *
-     * @author MeAlam
-     * @since 1.0.0
-     */
-    private BaseLogLevel() {
-    }
-
-    /**
      * Standard informational log level.
      *
      * @since 1.0.0
