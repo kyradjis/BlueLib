@@ -31,10 +31,10 @@ import software.bluelib.utils.variant.ParameterUtils;
  * This class manages the dragon's variant system, its data synchronization, and integrates with the GeckoLib
  * animation system.
  * </p>
- *
+ * <p>
  * Key Methods:
  * <ul>
- *   <li>{@link #finalizeSpawn(ServerLevelAccessor, DifficultyInstance, MobSpawnType, SpawnGroupData)} - Finalizes the spawning process and sets up parameters.</li>
+ *   <li>{@link #finalizeSpawn(ServerLevelAccessor, DifficultyInstance, EntitySpawnReason, SpawnGroupData)} - Finalizes the spawning process and sets up parameters.</li>
  *   <li>{@link #setVariantName(String)} - Sets the variant name of the Rex.</li>
  *   <li>{@link #getVariantName()} - Retrieves the current variant name of the Rex.</li>
  * </ul>
@@ -92,14 +92,14 @@ public class DragonEntity extends TamableAnimal implements IVariantEntity, GeoEn
      *
      * @param pLevel      {@link ServerLevelAccessor} - The level in which the entity is spawned.
      * @param pDifficulty {@link DifficultyInstance} - The difficulty instance for spawning.
-     * @param pReason     {@link MobSpawnType} - The reason for spawning the entity.
+     * @param pReason     {@link EntitySpawnReason} - The reason for spawning the entity.
      * @param pSpawnData  {@link SpawnGroupData} - Data related to the spawn.
      * @return {@link SpawnGroupData} - Updated spawn data.
      * @author MeAlam
      * @since 1.0.0
      */
     @Override
-    public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor pLevel, @NotNull DifficultyInstance pDifficulty, @NotNull MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData) {
+    public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor pLevel, @NotNull DifficultyInstance pDifficulty, @NotNull EntitySpawnReason pReason, @Nullable SpawnGroupData pSpawnData) {
         if (getVariantName() == null || getVariantName().isEmpty()) {
             setVariantName(getRandomVariant(getEntityVariants(entityName), "normal"));
             ParameterUtils.ParameterBuilder.forVariant(entityName, this.getVariantName())
@@ -113,8 +113,6 @@ public class DragonEntity extends TamableAnimal implements IVariantEntity, GeoEn
         return super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData);
     }
 
-
-
     /* All Code below this Fragment is not Library Related!!! */
 
     /**
@@ -126,8 +124,8 @@ public class DragonEntity extends TamableAnimal implements IVariantEntity, GeoEn
 
     /**
      * Defines the synchronized data for the dragon entity.
-     * @return {@link SynchedEntityData.Builder} - The builder for the synchronized data.
      *
+     * @return {@link SynchedEntityData.Builder} - The builder for the synchronized data.
      * @author MeAlam
      * @since 1.0.0
      */
@@ -143,8 +141,8 @@ public class DragonEntity extends TamableAnimal implements IVariantEntity, GeoEn
 
     /**
      * Adds custom data to the entity's NBT for saving.
-     * @param pControllerRegistrar {@link CompoundTag} - The tag to add the data to.
      *
+     * @param pControllerRegistrar {@link CompoundTag} - The tag to add the data to.
      * @author MeAlam
      * @since 1.0.0
      */
@@ -154,8 +152,8 @@ public class DragonEntity extends TamableAnimal implements IVariantEntity, GeoEn
 
     /**
      * Adds custom data to the entity's NBT for saving.
-     * @return {@link CompoundTag} - The tag with the custom data.
      *
+     * @return {@link CompoundTag} - The tag with the custom data.
      * @author MeAlam
      * @since 1.0.0
      */
@@ -166,10 +164,10 @@ public class DragonEntity extends TamableAnimal implements IVariantEntity, GeoEn
 
     /**
      * Adds custom data to the entity's NBT for saving.
-     * @param pLevel {@link CompoundTag} - The tag to add the data to.
+     *
+     * @param pLevel       {@link CompoundTag} - The tag to add the data to.
      * @param pOtherParent {@link CompoundTag} - The other tag to add the data from.
      * @return {@link CompoundTag} - The tag with the custom data.
-     *
      * @author MeAlam
      * @since 1.0.0
      */
@@ -181,9 +179,9 @@ public class DragonEntity extends TamableAnimal implements IVariantEntity, GeoEn
 
     /**
      * Adds custom data to the entity's NBT for saving.
+     *
      * @param pItemStack {@link ItemStack} - The item stack to check.
      * @return {@link boolean} - Whether the item is food or not.
-     *
      * @author MeAlam
      * @since 1.0.0
      */

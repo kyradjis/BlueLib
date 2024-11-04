@@ -30,7 +30,7 @@ import software.bluelib.utils.variant.ParameterUtils;
  * </p>
  * Key Methods:
  * <ul>
- *   <li>{@link #finalizeSpawn(ServerLevelAccessor, DifficultyInstance, MobSpawnType, SpawnGroupData)} - Finalizes the spawning process and sets up parameters.</li>
+ *   <li>{@link #finalizeSpawn(ServerLevelAccessor, DifficultyInstance, EntitySpawnReason, SpawnGroupData)} - Finalizes the spawning process and sets up parameters.</li>
  *   <li>{@link #setVariantName(String)} - Sets the variant name of the Rex.</li>
  *   <li>{@link #getVariantName()} - Retrieves the current variant name of the Rex.</li>
  * </ul>
@@ -88,14 +88,14 @@ public class DragonEntity extends TamableAnimal implements IVariantEntity, GeoEn
      *
      * @param pLevel      {@link ServerLevelAccessor} - The level in which the entity is spawned.
      * @param pDifficulty {@link DifficultyInstance} - The difficulty instance for spawning.
-     * @param pReason     {@link MobSpawnType} - The reason for spawning the entity.
+     * @param pReason     {@link EntitySpawnReason} - The reason for spawning the entity.
      * @param pSpawnData  {@link SpawnGroupData} - Data related to the spawn.
      * @return {@link SpawnGroupData} - Updated spawn data.
      * @author MeAlam
      * @since 1.0.0
      */
     @Override
-    public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor pLevel, @NotNull DifficultyInstance pDifficulty, @NotNull MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData) {
+    public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor pLevel, @NotNull DifficultyInstance pDifficulty, @NotNull EntitySpawnReason pReason, @Nullable SpawnGroupData pSpawnData) {
         if (getVariantName() == null || getVariantName().isEmpty()) {
             setVariantName(getRandomVariant(getEntityVariants(entityName), "normal"));
             ParameterUtils.ParameterBuilder.forVariant(entityName, this.getVariantName())
