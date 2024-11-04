@@ -13,7 +13,7 @@
 <h2 align="center">Available for:</h2>
 
 <div align="center">
-   <img src="https://github.com/user-attachments/assets/9bfe9a89-6004-404c-980b-029a71cdfb2b">
+   <img src="https://github.com/user-attachments/assets/4141486e-ac24-4208-84ad-89fb19627815">
 </div>
 
 <h2 align="center">Documentation:</h2>
