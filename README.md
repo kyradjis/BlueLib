@@ -19,6 +19,18 @@
 
 <h2 align="center">BlueLib is an All round Library for Minecraft Mods with Data Driven Features to ensure that anyone can implement this Library and have full freedom over the Features with both Resource and Datapack Support!</h2>
 
+<div align="center">
+  <details open>
+  <summary>Features</summary>
+  <ul>
+     <li>Datapack-Driven Variant Loader</li>
+     <li>Customizable and Extendable Logging System</li>
+     <li>10+ Versatile Utility Classes for tasks ranging from data conversion to complex mathematical operations, including Minecraft chunk calculations</li>
+  </ul>
+  </details>
+</div>
+
+
 <!-- Version Banner -->
 <div align="center">
   <img src="https://github.com/user-attachments/assets/3df10756-a0a4-4de8-8e9b-73d5ae9e24df" alt="Versions-Banner"/>
