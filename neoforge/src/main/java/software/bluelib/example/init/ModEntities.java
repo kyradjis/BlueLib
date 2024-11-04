@@ -3,6 +3,8 @@
 package software.bluelib.example.init;
 
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -68,6 +70,9 @@ public class ModEntities {
      * @since 1.0.0
      */
     private static <T extends Entity> DeferredHolder<EntityType<?>, EntityType<T>> register(String pRegistryName, EntityType.Builder<T> pEntityTypeBuilder) {
-        return REGISTRY.register(pRegistryName, () -> pEntityTypeBuilder.build(pRegistryName));
+        ResourceLocation registryLocation = ResourceLocation.fromNamespaceAndPath(BlueLibConstants.MOD_ID, pRegistryName);
+        ResourceKey<EntityType<?>> resourceKey = ResourceKey.create(Registries.ENTITY_TYPE, registryLocation);
+
+        return REGISTRY.register(pRegistryName, () -> pEntityTypeBuilder.build(resourceKey));
     }
 }

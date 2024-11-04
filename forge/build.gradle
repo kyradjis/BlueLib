@@ -70,8 +70,8 @@ dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     annotationProcessor("org.spongepowered:mixin:0.8.5-SNAPSHOT:processor")
 
-    compileOnly("curse.maven:geckolib-388172:5605712")
-    runtimeOnly("curse.maven:geckolib-388172:5605712")
+    compileOnly("curse.maven:geckolib-388172:5872376")
+    runtimeOnly("curse.maven:geckolib-388172:5872376")
 
     // Forge's hack fix
     implementation('net.sf.jopt-simple:jopt-simple:5.0.4') { version { strictly '5.0.4' } }
