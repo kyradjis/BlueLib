@@ -84,7 +84,7 @@ public class ChunkUtils {
      */
     public static String getBiomeRegistryNameOfChunk(Level pLevel, ChunkPos pChunkPos) {
         ResourceLocation biomeKey = pLevel.registryAccess()
-                .registryOrThrow(Registries.BIOME)
+                .lookupOrThrow(Registries.BIOME)
                 .getKey(pLevel.getBiome(pChunkPos.getWorldPosition()).value());
 
         if (biomeKey == null) {
@@ -152,7 +152,7 @@ public class ChunkUtils {
             return blockEntities.stream()
                     .map(blockEntity -> {
                         ResourceLocation key = pLevel.registryAccess()
-                                .registryOrThrow(Registries.BLOCK_ENTITY_TYPE)
+                                .lookupOrThrow(Registries.BLOCK_ENTITY_TYPE)
                                 .getKey(blockEntity.getType());
 
                         return key != null ? key.toString() : "unknown";
@@ -200,7 +200,7 @@ public class ChunkUtils {
             int blockCount = 0;
 
             for (int x = 0; x < 16; x++) {
-                for (int y = pLevel.getMinBuildHeight(); y < pLevel.getHeight(); y++) {
+                for (int y = pLevel.getMinY(); y < pLevel.getHeight(); y++) {
                     for (int z = 0; z < 16; z++) {
                         BlockPos worldPos = new BlockPos(pChunkPos.getMinBlockX() + x, y, pChunkPos.getMinBlockZ() + z);
                         if (!chunk.getBlockState(worldPos).isAir()) {
@@ -216,7 +216,7 @@ public class ChunkUtils {
         }
     }
 
-    /** FIXME: This method is not working as expected. It is not returning correctly.
+     /* FIXME: This method is not working as expected. It is not returning correctly.
      public static boolean isChunkLoaded(final LevelAccessor pWorld, final int pX, final int pZ) {
      try {
      boolean isLoaded = pWorld.getChunk(pX, pZ, ChunkStatus.FULL, false) != null;
