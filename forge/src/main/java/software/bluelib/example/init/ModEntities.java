@@ -2,6 +2,7 @@
 
 package software.bluelib.example.init;
 
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -43,8 +44,7 @@ public class ModEntities {
                     .setUpdateInterval(3)
                     .fireImmune()
                     .sized(0.6f, 1.8f)
-                    .build(ResourceLocation.fromNamespaceAndPath(BlueLibConstants.MOD_ID, "dragon").toString()));
-
+                    .build(ResourceKey.create(ForgeRegistries.Keys.ENTITY_TYPES, ResourceLocation.fromNamespaceAndPath(BlueLibConstants.MOD_ID, "dragon"))));
     /**
      * A {@code public static final} {@link RegistryObject} of {@link EntityType} for the {@link RexEntity}.
      *
@@ -57,7 +57,7 @@ public class ModEntities {
                     .setUpdateInterval(3)
                     .fireImmune()
                     .sized(0.6f, 1.8f)
-                    .build(ResourceLocation.fromNamespaceAndPath(BlueLibConstants.MOD_ID, "rex").toString()));
+                    .build(ResourceKey.create(ForgeRegistries.Keys.ENTITY_TYPES, ResourceLocation.fromNamespaceAndPath(BlueLibConstants.MOD_ID, "rex"))));
 
     /**
      * A {@code public static} method to register the {@link EntityType} for this mod.

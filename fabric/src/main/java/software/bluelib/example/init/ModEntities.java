@@ -4,6 +4,8 @@ package software.bluelib.example.init;
 
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import software.bluelib.BlueLibConstants;
@@ -47,13 +49,13 @@ public class ModEntities {
                 ResourceLocation.fromNamespaceAndPath(BlueLibConstants.MOD_ID, "example_one"),
                 EntityType.Builder.of(DragonEntity::new, CREATURE)
                         .sized(0.6F, 1.8F)
-                        .build("example_one"));
+                        .build(ResourceKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(BlueLibConstants.MOD_ID, "example_one"))));
 
         EXAMPLE_TWO = Registry.register(
                 BuiltInRegistries.ENTITY_TYPE,
                 ResourceLocation.fromNamespaceAndPath(BlueLibConstants.MOD_ID, "example_two"),
                 EntityType.Builder.of(RexEntity::new, CREATURE)
                         .sized(0.6F, 1.8F)
-                        .build("example_two"));
+                        .build(ResourceKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(BlueLibConstants.MOD_ID, "example_two"))));
     }
 }
