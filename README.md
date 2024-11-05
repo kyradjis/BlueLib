@@ -17,7 +17,7 @@
     <a href="https://img.shields.io/github/commit-activity/m/MeAlam1/BlueLib?style=for-the-badge" target="_blank"><img src="https://img.shields.io/github/commit-activity/m/MeAlam1/BlueLib?style=for-the-badge" alt="BlueLib Commit Activity" /></a>&nbsp;
 </p>  
 
-<h2 align="center">BlueLib is an All-round Library for Minecraft Mods with Data Driven Features to ensure that anyone can implement this Library and have full freedom over the Features with both Resource and Datapack Support!</h2>
+<h2 align="center">BlueLib is an all-round Minecraft modding library that leverages datapack-driven features, providing complete flexibility for mod development and seamless compatibility with addons, resource packs, and datapacks!</h2>
 
 <div align="center">
   <details open>
@@ -25,7 +25,7 @@
   <ul>
      <li>Datapack-Driven Variant Loader</li>
      <li>Customizable and Extendable Logging System</li>
-     <li>10+ Versatile Utility Classes for tasks ranging from data conversion to complex mathematical operations, including Minecraft chunk calculations</li>
+     <li>10+ Utility Classes for tasks ranging from data conversion to complex mathematical operations, including Minecraft chunk calculations</li>
   </ul>
   </details>
 </div>
