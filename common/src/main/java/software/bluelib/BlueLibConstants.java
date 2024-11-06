@@ -75,14 +75,14 @@ public class BlueLibConstants {
      *
      * @since 1.0.0
      */
-    public static final Boolean isExampleEnabled = true;
+    public static final Boolean isExampleEnabled = false;
 
     /** TODO: Always have on False when pushing to production
      * A {@link Boolean} to enable or disable BlueLib specific logging.
      *
      * @since 1.0.0
      */
-    public static boolean isBlueLibLoggingEnabled = true;
+    public static boolean isBlueLibLoggingEnabled = false;
 
     /**
      * A {@link Boolean} to enable or disable general logging.
