@@ -21,7 +21,7 @@
 
 <div align="center">
   <details open>
-  <summary>Features</summary>
+  <summary><h1>Features</h1></summary>
   <ul>
      <li>Datapack-Driven Variant Loader</li>
      <li>Customizable and Extendable Logging System</li>
