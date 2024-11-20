@@ -52,3 +52,4 @@ neoforge/build/*
 neoforge/.gradle/*
 neoforge/runs/*
 neoforge/run/*
+build/reports/problems/problems-report.html
