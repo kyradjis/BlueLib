@@ -4,9 +4,13 @@ package software.bluelib;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.event.Event;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import software.bluelib.example.entity.dragon.DragonEntity;
 import software.bluelib.example.entity.rex.RexEntity;
+import software.bluelib.example.event.ChatHandler;
 import software.bluelib.example.event.ReloadHandler;
 import software.bluelib.example.init.ModEntities;
 
@@ -23,6 +27,7 @@ import software.bluelib.example.init.ModEntities;
  * </ul>
  *
  * @author MeAlam
+ * @version 1.0.0
  * @since 1.0.0
  */
 public class BlueLib implements ModInitializer {
@@ -55,7 +60,7 @@ public class BlueLib implements ModInitializer {
     public void onInitialize() {
         if (BlueLibCommon.isDeveloperMode() && BlueLibCommon.PLATFORM.isModLoaded("geckolib") && BlueLibConstants.isExampleEnabled) {
             ModEntities.initializeEntities();
-            ReloadHandler.registerEventListeners();
+            registerEventListeners();
             FabricDefaultAttributeRegistry.register(ModEntities.EXAMPLE_ONE, DragonEntity.createMobAttributes());
             FabricDefaultAttributeRegistry.register(ModEntities.EXAMPLE_TWO, RexEntity.createMobAttributes());
         }
@@ -65,5 +70,16 @@ public class BlueLib implements ModInitializer {
                 BlueLibCommon.init();
             }
         });
+    }
+
+    /**
+     * Registers the event listeners.
+     *
+     * @author MeAlam
+     * @since 1.0.0
+     */
+    public static void registerEventListeners() {
+        ServerLifecycleEvents.SERVER_STARTING.register(ReloadHandler::onServerStart);
+        ServerMessageEvents.ALLOW_CHAT_MESSAGE.register(ChatHandler::onAllowChat);
     }
 }

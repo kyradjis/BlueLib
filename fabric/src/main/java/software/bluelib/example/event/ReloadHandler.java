@@ -28,6 +28,7 @@ import java.util.concurrent.TimeUnit;
  * </ul>
  *
  * @author MeAlam
+ * @version 1.0.0
  * @since 1.0.0
  */
 public class ReloadHandler extends ReloadEventHandler {
@@ -114,15 +115,5 @@ public class ReloadHandler extends ReloadEventHandler {
             ReloadEventHandler.registerEntityVariants(folderPath, pServer, BlueLibConstants.MOD_ID, entityName);
             BaseLogger.log(BaseLogLevel.INFO, "Entity variants loaded for " + entityName + ".", true);
         }
-    }
-
-    /**
-     * Registers the server start and reload event listeners.
-     *
-     * @author MeAlam
-     * @since 1.0.0
-     */
-    public static void registerEventListeners() {
-        ServerLifecycleEvents.SERVER_STARTING.register(ReloadHandler::onServerStart);
     }
 }
