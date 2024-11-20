@@ -26,6 +26,7 @@
      <li>Datapack-Driven Variant Loader</li>
      <li>Customizable and Extendable Logging System</li>
      <li>10+ Utility Classes for tasks ranging from data conversion to complex mathematical operations, including Minecraft chunk calculations</li>
+     <li>Markdown Chat Support</li>
   </ul>
   </details>
 </div>
