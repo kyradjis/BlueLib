@@ -3,6 +3,13 @@
    <img src="https://github.com/user-attachments/assets/285b840a-ba0b-4240-99f3-7130de23c448" alt="Main-Banner"/>
 </div>
 
+<p align="center">
+   <!-- Curseforge-->
+   <a href="https://www.curseforge.com/minecraft/mc-mods/bluelib"><img src="http://cf.way2muchnoise.eu/1083303.svg" alt="CF"></a>&nbsp;
+   <!-- Modrinth-->
+   <a href="https://modrinth.com/mod/bluelib"><img src="https://img.shields.io/modrinth/dt/bluelib?logo=modrinth&label=&suffix=%20&style=flat&color=242629&labelColor=5ca424&logoColor=1c1c1c" alt="Modrinth"></a>&nbsp;
+</p>  
+
 <!-- Discord Link -->
 <p align="center">
   <a href="https://discord.gg/WMpmqMbJsH"><img src="https://img.shields.io/discord/1272923738895286457?color=blue&label=Discord&logo=Discord&logoColor=blue&style=for-the-badge" alt="Discord"/></a>
@@ -10,12 +17,12 @@
 
 <p align="center">
    <!-- License -->
-    <a href="https://github.com/MeAlam1/BlueLib" target="_blank"><img src="https://img.shields.io/github/license/MeAlam1/BlueLib?style=for-the-badge" alt="BlueLib Licence" /></a>&nbsp;
+   <a href="https://github.com/MeAlam1/BlueLib" target="_blank"><img src="https://img.shields.io/github/license/MeAlam1/BlueLib?style=for-the-badge" alt="BlueLib Licence" /></a>&nbsp;
    <!-- Releases -->
-    <a href="https://github.com/MeAlam1/BlueLib/pkgs/container/permify" target="_blank"><img src="https://img.shields.io/github/v/release/MeAlam1/BlueLib?include_prereleases&style=for-the-badge" alt="BlueLib Release" /></a>&nbsp;
+   <a href="https://github.com/MeAlam1/BlueLib/pkgs/container/permify" target="_blank"><img src="https://img.shields.io/github/v/release/MeAlam1/BlueLib?include_prereleases&style=for-the-badge" alt="BlueLib Release" /></a>&nbsp;
    <!-- Commits -->
-    <a href="https://img.shields.io/github/commit-activity/m/MeAlam1/BlueLib?style=for-the-badge" target="_blank"><img src="https://img.shields.io/github/commit-activity/m/MeAlam1/BlueLib?style=for-the-badge" alt="BlueLib Commit Activity" /></a>&nbsp;
-</p>  
+   <a href="https://img.shields.io/github/commit-activity/m/MeAlam1/BlueLib?style=for-the-badge" target="_blank"><img src="https://img.shields.io/github/commit-activity/m/MeAlam1/BlueLib?style=for-the-badge" alt="BlueLib Commit Activity" /></a>&nbsp;
+</p>
 
 <h2 align="center">BlueLib is an all-round Minecraft modding library that leverages datapack-driven features, providing complete flexibility for mod development and seamless compatibility with addons, resource packs, and datapacks!</h2>
 
