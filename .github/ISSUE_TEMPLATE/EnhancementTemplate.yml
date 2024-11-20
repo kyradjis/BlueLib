@@ -1,6 +1,6 @@
-name: Enhancement Template
-description: Create a Enhancement!
-title: "[Enhancement]: "
+name: Suggestion Template
+description: Create a Suggestion!
+title: "[Suggestion]: "
 labels: ["Enhancement"]
 body:
   - type: markdown
