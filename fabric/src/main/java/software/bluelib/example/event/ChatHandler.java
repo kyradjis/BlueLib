@@ -15,6 +15,10 @@ import java.util.Objects;
  * This class listens for chat messages on the server and applies Markdown formatting to the message content
  * using the {@link MarkdownParser}. The formatted message is then set as the new message to be broadcasted.
  * </p>
+ *
+ * @author MeAlam
+ * @version 1.1.0
+ * @since 1.1.0
  */
 public class ChatHandler {
 
