@@ -2,35 +2,32 @@
 
 package software.bluelib.utils.variant;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import software.bluelib.entity.variant.VariantLoader;
-import software.bluelib.entity.variant.VariantParameter;
 import software.bluelib.utils.logging.BaseLogLevel;
 import software.bluelib.utils.logging.BaseLogger;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.NoSuchElementException;
+import java.util.Set;
 
 /**
- * A utility class for managing custom parameters associated with entity variants.
+ * A {@code public final class} that provides utility methods for managing custom parameters associated with entity variants.
  * <p>
- * Provides methods to retrieve custom parameters for variants and allows for
- * building and connecting parameters to specific variants via the {@link ParameterBuilder} class.
+ * This class contains methods to retrieve and handle custom parameters for variants, enabling the building and connecting of
+ * parameters to specific variants.
  * </p>
  * <p>
  * <strong>Key Methods:</strong>
  * <ul>
- *   <li>{@link #getParameter(String, String)} - Retrieves the value of a custom parameter for a specific variant.</li>
- * </ul>
- * <p>
- * <strong>Nested Classes:</strong>
- * <ul>
- *   <li>{@link ParameterBuilder} - Builder class for creating and associating custom parameters with variants.</li>
+ *   <li>{@link #getAllEntities()} - Retrieves all entities present in the variant loader.</li>
+ *   <li>{@link #getVariantsOfEntity(String)} - Retrieves the variants of a specific entity.</li>
+ *   <li>{@link #getCustomParameterForVariant(String, String, String)} - Retrieves the value of a custom parameter for a given variant.</li>
  * </ul>
  *
  * @author MeAlam
- * @version 1.0.0
- * @see VariantParameter
+ * @version 1.3.0
+ * @see VariantLoader
  * @since 1.0.0
  */
 public class ParameterUtils {
@@ -48,137 +45,88 @@ public class ParameterUtils {
     }
 
     /**
-     * Holds custom parameters for each variant.
+     * A {@code public static} {@link Set<String>} that retrieves all entities from the variant loader.
      * <p>
-     * The outer map's key is the variant name, and the inner map contains key-value pairs
-     * representing custom parameters for that variant.
+     * This method accesses the {@link VariantLoader} to fetch all the entities present in the {@code AllVariants} map.
      * </p>
      *
-     * @since 1.0.0
-     */
-    private static final Map<String, Map<String, String>> variantParametersMap = new HashMap<>();
-
-    /**
-     * A {@link String} that retrieves the value of a custom parameter for a specific variant.
-     * <p>
-     * If the parameter is not found, {@code null} is returned.
-     * </p>
-     *
-     * @param pVariantName  {@link String} The name of the variant.
-     * @param pParameterKey {@link String} The key of the parameter to retrieve.
-     * @return {@link String} The value of the custom parameter for the specified variant or {@code null}  if not found.
+     * @return A {@link Set<String>} containing all the entity names from the variant loader.
      * @author MeAlam
-     * @since 1.0.0
+     * @since 1.3.0
      */
-    public static String getParameter(String pVariantName, String pParameterKey) {
-        return variantParametersMap.getOrDefault(pVariantName, new HashMap<>()).getOrDefault(pParameterKey, "null");
+    public static Set<String> getAllEntities() {
+        Set<String> allEntities = VariantLoader.AllVariants.keySet();
+        BaseLogger.log(BaseLogLevel.INFO, "Found Entities: " + allEntities, true);
+        return allEntities;
     }
 
     /**
-     * A {@code class} for creating and associating custom parameters with a specific variant.
+     * A {@code public static} {@link Set<String>}  that retrieves all variants for a specific entity.
      * <p>
-     * Allows chaining methods to build and connect parameters to a variant.
+     * This method checks the provided {@code pEntityName} and returns the corresponding variants from the variant data.
+     * </p>
+     *
+     * @param pEntityName {@link String} - The name of the entity for which variants are to be retrieved.
+     * @return A {@link Set<String>} of variant names for the given entity, or {@code null} if the entity does not exist.
+     * @author MeAlam
+     * @since 1.3.0
+     */
+    public static Set<String> getVariantsOfEntity(String pEntityName) {
+        JsonObject entityData = VariantLoader.AllVariants.get(pEntityName);
+        if (entityData != null) {
+            Set<String> variants = entityData.keySet();
+            BaseLogger.log(BaseLogLevel.INFO, "Found Variants: " + variants, true);
+            return variants;
+        }
+        BaseLogger.log(BaseLogLevel.WARNING, "No variants found for: " + pEntityName, true);
+        return null;
+    }
+
+    /**
+     * A {@code public static} {@link String} method that retrieves the value of a custom parameter for a specific variant.
+     * <p>
+     * This method accesses the variant data for a specified entity and variant and retrieves the value of a custom parameter.
      * </p>
      * <p>
-     * <strong>Key Methods:</strong>
-     * <ul>
-     *   <li>{@link #forVariant(String, String)} - Creates a new instance of {@link ParameterBuilder} for a specific entity and variant.</li>
-     *   <li>{@link #withParameter(String)} - Adds a parameter with a default value of {@code null} .</li>
-     *   <li>{@link #connect()} - Connects the parameters to the variant and updates {@link VariantParameter} with the parameters.</li>
-     * </ul>
+     * The method checks if the parameter exists and returns its value as a {@link String}.
+     * </p>
      *
+     * @param pEntityName  {@link String} - The name of the entity whose variant parameter is being queried.
+     * @param pVariantName {@link String} - The name of the variant whose parameter is being queried.
+     * @param pParameter   {@link String} - The name of the custom parameter to retrieve.
+     * @return The value of the custom parameter as a {@link String}, or {@code null} if not found.
      * @author MeAlam
-     * @since 1.0.0
+     * @since 1.3.0
      */
-    public static class ParameterBuilder {
+    public static String getCustomParameterForVariant(String pEntityName, String pVariantName, String pParameter) {
+        JsonObject entityData = VariantLoader.AllVariants.get(pEntityName);
+        if (entityData != null) {
+            JsonArray variants = entityData.getAsJsonArray(pVariantName);
 
-        /**
-         * The name of the variant being associated with custom parameters.
-         *
-         * @since 1.0.0
-         */
-        private final String variantName;
-
-        /**
-         * The name of the entity being associated with custom parameters.
-         *
-         * @since 1.0.0
-         */
-        private final String entityName;
-
-        /**
-         * Stores custom parameters being built for the variant.
-         *
-         * @since 1.0.0
-         */
-        private final Map<String, String> parameters = new HashMap<>();
-
-        /**
-         * Constructor to initialize the builder for a specific entity and variant.
-         *
-         * @param pEntityName  {@link String} The name of the entity.
-         * @param pVariantName {@link String} The name of the variant.
-         * @author MeAlam
-         * @since 1.0.0
-         */
-        private ParameterBuilder(String pEntityName, String pVariantName) {
-            this.variantName = pVariantName;
-            this.entityName = pEntityName;
-        }
-
-        /**
-         * A {@link ParameterBuilder} that creates a new instance of {@link ParameterBuilder} for the specified entity and variant.
-         *
-         * @param pEntityName  {@link String} The name of the entity.
-         * @param pVariantName {@link String} The name of the variant.
-         * @return {@link ParameterBuilder} A new instance for chaining.
-         * @author MeAlam
-         * @since 1.0.0
-         */
-        public static ParameterBuilder forVariant(String pEntityName, String pVariantName) {
-            return new ParameterBuilder(pEntityName, pVariantName);
-        }
-
-        /**
-         * A {@link ParameterBuilder} that adds a custom parameter to the builder with a default value of "null".
-         * <p>
-         * The {@code null}  value is used if the parameter is not specified in the data source.
-         * </p>
-         *
-         * @param pParameter {@link String} The parameter key.
-         * @return {@link ParameterBuilder} The builder instance for chaining.
-         * @author MeAlam
-         * @since 1.0.0
-         */
-        public ParameterBuilder withParameter(String pParameter) {
-            parameters.put(pParameter, "null");
-            return this;
-        }
-
-        /**
-         * A {@link ParameterBuilder} that connects the custom parameters to the specified variant and updates the {@link VariantParameter}.
-         * <p>
-         * Throws a {@link NoSuchElementException} if the variant or entity is not found.
-         * </p>
-         *
-         * @return {@link ParameterBuilder} The builder instance for chaining.
-         * @throws NoSuchElementException if the variant or entity is not found in the database.
-         * @author MeAlam
-         * @since 1.0.0
-         */
-        public ParameterBuilder connect() {
-            VariantParameter variant = VariantLoader.getVariantByName(entityName, variantName);
-            if (variant != null) {
-                Map<String, String> updatedParameters = new HashMap<>();
-                for (String key : parameters.keySet()) {
-                    updatedParameters.put(key, variant.getParameter(key));
+            if (variants != null && !variants.isEmpty()) {
+                for (int i = 0; i < variants.size(); i++) {
+                    JsonElement variantElement = variants.get(i);
+                    if (variantElement.isJsonObject()) {
+                        JsonObject variant = variantElement.getAsJsonObject();
+                        if (variant.has(pParameter)) {
+                            JsonElement parameterElement = variant.get(pParameter);
+                            if (parameterElement.isJsonPrimitive()) {
+                                String value = parameterElement.getAsString();
+                                BaseLogger.log(BaseLogLevel.INFO, "Found custom parameter: " + pParameter + " with value: " + value
+                                        + " for: " + pEntityName, true);
+                                return value;
+                            } else if (parameterElement.isJsonObject()) {
+                                String value = parameterElement.getAsString();
+                                BaseLogger.log(BaseLogLevel.INFO, "Found custom parameter: " + pParameter + " with value: " + value
+                                        + " for: " + pEntityName, true);
+                                return value;
+                            }
+                        }
+                    }
                 }
-                variantParametersMap.put(variantName, updatedParameters);
-            } else {
-                Throwable throwable = new Throwable("Variant or entity not found in the database");
-                BaseLogger.log(BaseLogLevel.ERROR, "Variant '" + variantName + "' not found for entity '" + entityName + "'", throwable, true);
             }
-            return this;
         }
+        BaseLogger.log(BaseLogLevel.WARNING, "Custom parameter: " + pParameter + " not found for: " + pEntityName, true);
+        return null;
     }
 }

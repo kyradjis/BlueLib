@@ -6,9 +6,12 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -101,14 +104,23 @@ public class DragonEntity extends TamableAnimal implements IVariantEntity, GeoEn
      */
     @Override
     public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor pLevel, @NotNull DifficultyInstance pDifficulty, @NotNull EntitySpawnReason pReason, @Nullable SpawnGroupData pSpawnData) {
+        String randomVariant = getRandomVariant(getEntityVariants(entityName), "normal");
+        BaseLogger.log(BaseLogLevel.INFO, "customParameter: " + ParameterUtils.getCustomParameterForVariant(entityName ,randomVariant, "customParameter"), true);
+
         if (getVariantName() == null || getVariantName().isEmpty()) {
-            setVariantName(getRandomVariant(getEntityVariants(entityName), "normal"));
+            setVariantName(randomVariant);
         }
         BaseLogger.log(BaseLogLevel.SUCCESS, "Dragon Spawned with Variant: " + getVariantName(), true);
         return super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData);
     }
 
     /* All Code below this Fragment is not Library Related!!! */
+
+    @Override
+    public InteractionResult mobInteract(Player player, InteractionHand hand) {
+        BaseLogger.log(BaseLogLevel.INFO, "customParameter: " + ParameterUtils.getCustomParameterForVariant(entityName ,getVariantName(), "customParameter"), true);
+        return super.mobInteract(player, hand);
+    }
 
     /**
      * The cache for the animatable instance.

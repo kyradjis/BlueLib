@@ -8,6 +8,7 @@ import software.bluelib.utils.logging.BaseLogLevel;
 import software.bluelib.utils.logging.BaseLogger;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * A {@code public Interface} representing an entity that supports multiple variants.
@@ -22,7 +23,7 @@ import java.util.List;
  * </ul>
  *
  * @author MeAlam
- * @version 1.0.0
+ * @version 1.3.0
  * @since 1.0.0
  */
 public interface IVariantEntity extends IVariantEntityBase {
