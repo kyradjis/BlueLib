@@ -2,15 +2,15 @@
 
 package software.bluelib.example.event;
 
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.server.MinecraftServer;
 import software.bluelib.BlueLibConstants;
 import software.bluelib.event.ReloadEventHandler;
 import software.bluelib.utils.logging.BaseLogLevel;
 import software.bluelib.utils.logging.BaseLogger;
+import software.bluelib.utils.variant.ParameterUtils;
 
-import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -89,14 +89,17 @@ public class ReloadHandler extends ReloadEventHandler {
     private static final String basePath = "variant/entity/";
 
     /**
-     * A {@link List} of entity names for which variants will be loaded.
+     * The entities with their variants.
      * <p>
-     * This list defines which entities will have their variants loaded from JSON files.
+     * This map contains the entity names and their respective variants.
      * </p>
      *
      * @since 1.0.0
      */
-    private static final List<String> entityNames = Arrays.asList("dragon", "rex");
+    private static final Map<String, List<String>> entityVariants = Map.of(
+            "dragon", List.of("dark", "bright", "blue", "pink"),
+            "rex", List.of("green", "brown")
+    );
 
     /**
      * Loads entity variants from JSON files into the {@link MinecraftServer}.
@@ -110,9 +113,21 @@ public class ReloadHandler extends ReloadEventHandler {
      * @since 1.0.0
      */
     public static void LoadEntityVariants(MinecraftServer pServer) {
-        for (String entityName : entityNames) {
+        for (Map.Entry<String, List<String>> entry : entityVariants.entrySet()) {
+            String entityName = entry.getKey();
+            List<String> variants = entry.getValue();
+
             String folderPath = basePath + entityName;
             ReloadEventHandler.registerEntityVariants(folderPath, pServer, BlueLibConstants.MOD_ID, entityName);
+
+            for (String variantName : variants) {
+                ParameterUtils.ParameterBuilder.forVariant(entityName, variantName)
+                        .withParameter("customParameter")
+                        .withParameter("int")
+                        .withParameter("bool")
+                        .withParameter("array")
+                        .connect();
+            }
             BaseLogger.log(BaseLogLevel.INFO, "Entity variants loaded for " + entityName + ".", true);
         }
     }
