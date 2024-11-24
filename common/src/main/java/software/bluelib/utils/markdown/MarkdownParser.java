@@ -3,6 +3,8 @@
 package software.bluelib.utils.markdown;
 
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.server.level.ServerPlayer;
 import software.bluelib.utils.logging.BaseLogLevel;
 import software.bluelib.utils.logging.BaseLogger;
 
@@ -12,10 +14,10 @@ import software.bluelib.utils.logging.BaseLogger;
  * This class processes text components and applies Markdown-style formatting (bold, italic, strikethrough, and underline) to
  * the text. The formatting is controlled globally or individually through the {@link EnableMarkdownFor} and {@link DisableMarkdownFor} inner classes.
  * </p>
- *
+ * <p>
  * Key Methods:
  * <ul>
- *     <li>{@link #parseMarkdown(Component)} - Parses and applies Markdown formatting to a given message component.</li>
+ *     <li>{@link #parseMarkdown(Component, ServerPlayer)} - Parses and applies Markdown formatting to a given message component.</li>
  *     <li>{@link #enableMarkdown()} - Enables global Markdown formatting.</li>
  *     <li>{@link #disableMarkdown()} - Disables global Markdown formatting.</li>
  *     <li>{@link #enableMarkdownFor()} - Returns an instance of {@link EnableMarkdownFor} to enable specific Markdown features.</li>
@@ -23,7 +25,7 @@ import software.bluelib.utils.logging.BaseLogger;
  * </ul>
  *
  * @author MeAlam
- * @version 1.3.0
+ * @version 1.4.0
  * @since 1.1.0
  */
 public class MarkdownParser {
@@ -59,14 +61,12 @@ public class MarkdownParser {
      * </p>
      *
      * @param pMessage {@link Component} - The message component containing the text to format.
-     * @return A new {@link Component} with applied Markdown formatting.
      * @author MeAlam
      * @since 1.1.0
      */
-    public static Component parseMarkdown(Component pMessage) {
+    public static MutableComponent parseMarkdown(Component pMessage, ServerPlayer pPlayer) {
         if (!globalMarkdownEnabled) {
             BaseLogger.log(BaseLogLevel.INFO, "Global markdown is disabled, returning original message", true);
-            return pMessage;
         }
 
         String text = pMessage.getString();
@@ -74,8 +74,9 @@ public class MarkdownParser {
         text = new Italic().apply(text);
         text = new Strikethrough().apply(text);
         text = new Underline().apply(text);
+        MutableComponent formattedMessage = new Hyperlink().applyLast(text);
         BaseLogger.log(BaseLogLevel.INFO, "Markdown applied to message: " + text, true);
-        return Component.literal(text);
+        return formattedMessage;
     }
 
     /**

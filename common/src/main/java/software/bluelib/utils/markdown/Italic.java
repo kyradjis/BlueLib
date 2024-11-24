@@ -14,7 +14,7 @@ import software.bluelib.utils.logging.BaseLogger;
  * </p>
  *
  * @author MeAlam
- * @version 1.3.0
+ * @version 1.4.0
  * @see MarkdownFeature
  * @see #applyFormat(String)
  * @since 1.1.0
@@ -73,7 +73,7 @@ public class Italic extends MarkdownFeature {
     @Override
     protected String applyFormat(String pContent) {
         if (!isItalicEnabled) {
-            BaseLogger.log(BaseLogLevel.WARNING, "Italic is disabled. Returning original content.", true);
+            BaseLogger.log(BaseLogLevel.INFO, "Italic is disabled. Returning original content.", true);
             return prefix + pContent + suffix;
         }
         return "§o" + pContent + "§r";
