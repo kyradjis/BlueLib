@@ -36,7 +36,7 @@ public class ChatHandler {
      */
     public static boolean onAllowChat(PlayerChatMessage pPlayerChatMessage, ServerPlayer pServerPlayer, ChatType.Bound pBound) {
         Component originalMessage = pPlayerChatMessage.decoratedContent();
-        Component formattedMessage = MarkdownParser.parseMarkdown(originalMessage, pServerPlayer);
+        Component formattedMessage = MarkdownParser.parseMarkdown(originalMessage);
         if (!formattedMessage.equals(originalMessage)) {
             PlayerChatMessage newPlayerChatMessage = new PlayerChatMessage(
                     pPlayerChatMessage.link(),

@@ -36,7 +36,7 @@ public class ChatHandler {
     @SubscribeEvent
     public static void onServerChat(ServerChatEvent pEvent) {
         Component originalMessage = pEvent.getMessage();
-        Component formattedMessage = MarkdownParser.parseMarkdown(originalMessage, pEvent.getPlayer());
+        Component formattedMessage = MarkdownParser.parseMarkdown(originalMessage);
         pEvent.setMessage(formattedMessage);
     }
 }

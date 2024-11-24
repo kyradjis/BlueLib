@@ -61,10 +61,11 @@ public class MarkdownParser {
      * </p>
      *
      * @param pMessage {@link Component} - The message component containing the text to format.
+     * @return A {@link MutableComponent} with the Markdown formatting applied.
      * @author MeAlam
      * @since 1.1.0
      */
-    public static MutableComponent parseMarkdown(Component pMessage, ServerPlayer pPlayer) {
+    public static MutableComponent parseMarkdown(Component pMessage) {
         if (!globalMarkdownEnabled) {
             BaseLogger.log(BaseLogLevel.INFO, "Global markdown is disabled, returning original message", true);
         }
