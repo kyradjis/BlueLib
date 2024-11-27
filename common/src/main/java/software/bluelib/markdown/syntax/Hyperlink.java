@@ -1,8 +1,9 @@
 // Copyright (c) BlueLib. Licensed under the MIT License.
 
-package software.bluelib.utils.markdown;
+package software.bluelib.markdown.syntax;
 
 import net.minecraft.network.chat.*;
+import software.bluelib.markdown.MarkdownFeature;
 import software.bluelib.utils.logging.BaseLogLevel;
 import software.bluelib.utils.logging.BaseLogger;
 import software.bluelib.utils.math.MiscUtils;
@@ -41,7 +42,7 @@ public class Hyperlink extends MarkdownFeature {
      *
      * @since 1.4.0
      */
-    protected static Boolean isHyperlinkEnabled = true;
+    public static Boolean isHyperlinkEnabled = true;
 
     /**
      * A {@code public} constructor that initializes the prefix and suffix for the Hyperlink formatting feature.

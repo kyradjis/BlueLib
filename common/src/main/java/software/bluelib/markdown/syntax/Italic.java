@@ -1,7 +1,8 @@
 // Copyright (c) BlueLib. Licensed under the MIT License.
 
-package software.bluelib.utils.markdown;
+package software.bluelib.markdown.syntax;
 
+import software.bluelib.markdown.MarkdownFeature;
 import software.bluelib.utils.logging.BaseLogLevel;
 import software.bluelib.utils.logging.BaseLogger;
 
@@ -40,7 +41,7 @@ public class Italic extends MarkdownFeature {
      *
      * @since 1.1.0
      */
-    protected static Boolean isItalicEnabled = true;
+    public static Boolean isItalicEnabled = true;
 
     /**
      * A {@code public} constructor that initializes the prefix and suffix for the italic formatting feature.
