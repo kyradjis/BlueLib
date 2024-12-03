@@ -15,6 +15,17 @@ import software.bluelib.utils.math.MiscUtils;
  * {@link MarkdownFeature} class and overrides the {@link #applyFormat(String)} method to provide
  * the specific formatting logic for Hyperlink text.
  * </p>
+ * <p>
+ * Key Methods:
+ * <ul>
+ * <li>{@link #applyComponent(String)} - Applies Hyperlink formatting to the provided message.</li>
+ * <li>{@link #setPrefixSuffix(String, String)} - Updates the prefix and suffix used for Hyperlink formatting.</li>
+ * <li>{@link #setPrefix(String)} - Updates the prefix used for Hyperlink formatting.</li>
+ * <li>{@link #setSuffix(String)} - Updates the suffix used for Hyperlink formatting.</li>
+ * <li>{@link #getPrefix()} - Retrieves the current prefix used for Hyperlink formatting.</li>
+ * <li>{@link #getSuffix()} - Retrieves the current suffix used for Hyperlink formatting.</li>
+ * <li>{@link #isHyperlinkEnabled()} - Retrieves whether Hyperlink formatting is enabled.</li>
+ * </ul>
  *
  * @author MeAlam
  * @version 1.4.0
@@ -71,34 +82,49 @@ public class Hyperlink extends MarkdownFeature {
      * @author MeAlam
      * @since 1.4.0
      */
-    public MutableComponent applyLast(String pMessage) {
+    @Override
+    public MutableComponent applyComponent(String pMessage) {
         if (!isHyperlinkEnabled) {
             BaseLogger.log(BaseLogLevel.INFO, "Hyperlink formatting is disabled. Returning original content.", true);
             return Component.literal(pMessage);
         }
 
-        String[] splitMessage = splitMessage(pMessage);
+        MutableComponent finalMessage = Component.empty();
+        int currentIndex = 0;
 
-        if (splitMessage[0].endsWith("\\")) {
-            String modifiedMessage = pMessage.substring(0, pMessage.lastIndexOf("\\"))
-                    + pMessage.substring(pMessage.lastIndexOf("\\") + 1);
-            return Component.literal(modifiedMessage);
+        while (currentIndex < pMessage.length()) {
+            int openBracketIndex = pMessage.indexOf("[", currentIndex);
+            int closeBracketIndex = pMessage.indexOf("]", openBracketIndex);
+            int openParenIndex = pMessage.indexOf("(", closeBracketIndex);
+            int closeParenIndex = pMessage.indexOf(")", openParenIndex);
+
+            if (openBracketIndex == -1 || closeBracketIndex == -1 || openParenIndex == -1 || closeParenIndex == -1) {
+                finalMessage.append(Component.literal(pMessage.substring(currentIndex)));
+                break;
+            }
+
+            if (openBracketIndex > currentIndex) {
+                finalMessage.append(Component.literal(pMessage.substring(currentIndex, openBracketIndex)));
+            }
+
+            String linkText = pMessage.substring(openBracketIndex + 1, closeBracketIndex).trim();
+            String url = pMessage.substring(openParenIndex + 1, closeParenIndex).trim();
+
+            if (!MiscUtils.isValidURL(url)) {
+                finalMessage.append(Component.literal(pMessage.substring(openBracketIndex, closeParenIndex + 1)));
+                currentIndex = closeParenIndex + 1;
+                continue;
+            }
+
+            MutableComponent link = Component.literal(linkText)
+                    .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0x1F5FE1)).withUnderlined(true)
+                            .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, url)));
+            finalMessage.append(link);
+
+            currentIndex = closeParenIndex + 1;
         }
 
-        if (!MiscUtils.isValidURL(splitMessage[2])) {
-            return Component.literal(pMessage);
-        }
-
-        MutableComponent partOne = splitMessage[0].isEmpty() ? Component.empty() : Component.literal(splitMessage[0]);
-        MutableComponent link = Component.literal(splitMessage[1])
-                .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xFFFFFF)).withUnderlined(true)
-                        .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, splitMessage[2])));
-        MutableComponent partTwo = splitMessage[3].isEmpty() ? Component.empty() : Component.literal(splitMessage[3]);
-
-        return partOne.append(Component.literal(" "))
-                .append(link)
-                .append(Component.literal(" "))
-                .append(partTwo);
+        return finalMessage;
     }
 
     /**
@@ -115,45 +141,6 @@ public class Hyperlink extends MarkdownFeature {
     @Override
     protected String applyFormat(String pContent) {
         return pContent;
-    }
-
-    /**
-     * A {@code static} {@link String}{@code []} that splits the provided message into parts.
-     * <p>
-     * The method identifies the text before the hyperlink, the link text, the URL, and the text after the hyperlink.
-     * </p>
-     *
-     * @param pMessage {@link String} - The message to split.
-     * @return {@link String}{@code []} - An array containing:
-     *         <ul>
-     *         <li>Text before the hyperlink</li>
-     *         <li>Link text</li>
-     *         <li>URL</li>
-     *         <li>Text after the hyperlink</li>
-     *         </ul>
-     * @author MeAlam
-     * @since 1.4.0
-     */
-    static String[] splitMessage(String pMessage) {
-        int openBracketIndex = pMessage.indexOf("[");
-        int closeBracketIndex = pMessage.indexOf("]", openBracketIndex);
-        int openParenIndex = pMessage.indexOf("(", closeBracketIndex);
-        int closeParenIndex = pMessage.indexOf(")", openParenIndex);
-
-        String beforeLink = (openBracketIndex > 0) ? pMessage.substring(0, openBracketIndex).trim() : "";
-        String linkText = (openBracketIndex != -1 && closeBracketIndex != -1)
-                ? pMessage.substring(openBracketIndex + 1, closeBracketIndex).trim()
-                : " ";
-        String url = (openParenIndex != -1 && closeParenIndex != -1)
-                ? pMessage.substring(openParenIndex + 1, closeParenIndex).trim()
-                : " ";
-        String afterLink = (closeParenIndex != -1) ? pMessage.substring(closeParenIndex + 1).trim() : "";
-
-        if (!url.isEmpty() && linkText.isEmpty()) {
-            linkText = url;
-        }
-
-        return new String[] { beforeLink, linkText, url, afterLink };
     }
 
     /**
