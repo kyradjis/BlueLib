@@ -21,7 +21,7 @@ import java.util.logging.Logger;
  * </ul>
  *
  * @author MeAlam
- * @version 1.0.0
+ * @version 1.5.0
  * @since 1.0.0
  */
 public class BlueLibConstants {
@@ -68,15 +68,6 @@ public class BlueLibConstants {
      * @since 1.0.0
      */
     public static final String MOD_NAME = "BlueLib";
-
-    /**
-     * TODO: Always have on False when pushing to production
-     * A {@code public static final} {@link Boolean} indicating whether the example features should be enabled. <br>
-     * Should always be false in production.
-     *
-     * @since 1.0.0
-     */
-    public static final Boolean isExampleEnabled = false;
 
     /**
      * TODO: Always have on False when pushing to production
