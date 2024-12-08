@@ -58,9 +58,9 @@ public class CopyToClipboard extends MarkdownFeature {
      * <br>
      * This method iterates over the siblings of the input message and applies the CopyToClipboard formatting
      * to each sibling that does not already have a click event set. The text to copy is set to the provided
-     * {@code textToCopy} parameter.
+     * {@code pTextToCopy} parameter.
      *
-     * @param pMessage   {@link MutableComponent} - The input message to be formatted.
+     * @param pMessage    {@link MutableComponent} - The input message to be formatted.
      * @param pTextToCopy {@link String} - The text to copy to the clipboard.
      * @author MeAlam
      * @since 1.5.0
