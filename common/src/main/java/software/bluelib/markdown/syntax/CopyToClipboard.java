@@ -24,7 +24,7 @@ import software.bluelib.utils.logging.BaseLogger;
  * </ul>
  *
  * @author MeAlam
- * @version 1.5.0
+ * @version 1.6.0
  * @see MarkdownFeature
  * @since 1.5.0
  */
@@ -61,18 +61,18 @@ public class CopyToClipboard extends MarkdownFeature {
      * {@code textToCopy} parameter.
      *
      * @param pMessage   {@link MutableComponent} - The input message to be formatted.
-     * @param textToCopy {@link String} - The text to copy to the clipboard.
+     * @param pTextToCopy {@link String} - The text to copy to the clipboard.
      * @author MeAlam
      * @since 1.5.0
      */
-    public MutableComponent applyCopyToClipboard(MutableComponent pMessage, String textToCopy) {
+    public MutableComponent applyCopyToClipboard(MutableComponent pMessage, String pTextToCopy) {
         MutableComponent result = Component.literal("");
 
         for (Component sibling : pMessage.getSiblings()) {
             if (sibling instanceof MutableComponent mutableSibling) {
                 if (mutableSibling.getStyle().getClickEvent() == null) {
                     mutableSibling.setStyle(mutableSibling.getStyle()
-                            .withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, textToCopy)));
+                            .withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, pTextToCopy)));
                 }
                 result.append(mutableSibling);
             } else {

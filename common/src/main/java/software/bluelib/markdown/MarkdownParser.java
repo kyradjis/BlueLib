@@ -25,7 +25,7 @@ import software.bluelib.utils.logging.BaseLogger;
  * </ul>
  *
  * @author MeAlam
- * @version 1.5.0
+ * @version 1.6.0
  * @since 1.1.0
  */
 public class MarkdownParser {
@@ -137,6 +137,7 @@ public class MarkdownParser {
      * <li>{@link #underline()} - Enables underline Markdown formatting.</li>
      * <li>{@link #hyperlink()} - Enables hyperlink Markdown formatting.</li>
      * <li>{@link #spoiler()} - Enables spoiler Markdown formatting.</li>
+     * <li>{@link #copyToClipboard()} - Enables copy to clipboard Markdown formatting.</li>
      * </ul>
      *
      * @author MeAlam
@@ -222,6 +223,19 @@ public class MarkdownParser {
             BaseLogger.log(BaseLogLevel.INFO, "Enabled spoiler markdown", true);
             return this;
         }
+
+        /**
+         * A {@code public} method that enables CopyToClipboard Markdown formatting.
+         *
+         * @return The {@link EnableMarkdownFor} instance to allow method chaining.
+         * @author MeAlam
+         * @since 1.6.0
+         */
+        public EnableMarkdownFor copyToClipboard() {
+            Spoiler.isSpoilerEnabled = true;
+            BaseLogger.log(BaseLogLevel.INFO, "Enabled CopyToClipboard markdown", true);
+            return this;
+        }
     }
 
     /**
@@ -237,6 +251,8 @@ public class MarkdownParser {
      * <li>{@link #strikethrough()} - Disables strikethrough Markdown formatting.</li>
      * <li>{@link #underline()} - Disables underline Markdown formatting.</li>
      * <li>{@link #hyperlink()} - Disables hyperlink Markdown formatting.</li>
+     * <li>{@link #spoiler()} - Disables spoiler Markdown formatting.</li>
+     * <li>{@link #copyToClipboard()} - Disables copy to clipboard Markdown formatting.</li>
      * </ul>
      *
      * @author MeAlam
@@ -320,6 +336,19 @@ public class MarkdownParser {
         public DisableMarkdownFor spoiler() {
             Spoiler.isSpoilerEnabled = false;
             BaseLogger.log(BaseLogLevel.INFO, "Disabled spoiler markdown", true);
+            return this;
+        }
+
+        /**
+         * A {@code public} method that disables CopyToClipboard Markdown formatting.
+         *
+         * @return The {@link DisableMarkdownFor} instance to allow method chaining.
+         * @author MeAlam
+         * @since 1.6.0
+         */
+        public DisableMarkdownFor copyToClipboard() {
+            Spoiler.isSpoilerEnabled = false;
+            BaseLogger.log(BaseLogLevel.INFO, "Disabled CopyToClipboard markdown", true);
             return this;
         }
     }
