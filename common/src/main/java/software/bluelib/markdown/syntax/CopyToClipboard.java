@@ -66,6 +66,9 @@ public class CopyToClipboard extends MarkdownFeature {
      * @since 1.5.0
      */
     public MutableComponent applyCopyToClipboard(MutableComponent pMessage, String pTextToCopy) {
+        if (!isCopyToClipboardEnabled) {
+            return pMessage;
+        }
         MutableComponent result = Component.literal("");
 
         for (Component sibling : pMessage.getSiblings()) {
