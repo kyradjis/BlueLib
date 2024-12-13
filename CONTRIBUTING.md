@@ -15,108 +15,112 @@
 
 - All code should be commented using the `/** * * */` format. This ensures that comments are displayed when users hover over a method, class, or variable, even after the library is compiled. This helps maintain clarity and consistency in the documentation.
 
-  - **Structure**:
-      - **Class Descriptions**: 
-        - **Start with:** Start the Comment with A(n) {@code privacy/static/final} {@code/link Class/MethodType} [Description of the Class/Method].
-        - **Key Methods:** List key methods provided by the class, using bullet points for easy readability.
-        - **Author:** If you have contributed to a Method/Class, feel free to add yourself to the author tag.
-        - **Since Version:** Use the `@since` tag to indicate the version since which the Method/Class has been available.
-        - **Version:** Use the `@version` tag to indicate the version since when the class has last been updated.
-            **Example:**
-          ```java
-            /**
-            * A {@code public abstract base class} for managing a collection of {@link #parameters}.
-            * <p>
-            * This {@code class} provides methods to add, retrieve, remove, and manipulate {@link #parameters} stored as key-value pairs.
-            * </p>
-            * Key Methods:
-            * <ul>
-            *   <li>{@link #addParameter(String, Object)} - Adds a parameter to {@link #parameters}.</li>
-            *   <li>{@link #getParameter(String)} - Retrieves a parameter from {@link #parameters}.</li>
-            *   <li>{@link #removeParameter(String)} - Removes a parameter from {@link #parameters}.</li>
-            *   <li>{@link #getAllParameters()} - Returns all parameters in {@link #parameters}.</li>
-            *   <li>{@link #containsParameter(String)} - Checks if a parameter exists by its key from {@link #parameters}.</li>
-            *   <li>{@link #isEmpty()} - Checks if {@link #parameters} is empty.</li>
-            *   <li>{@link #clearParameters()} - Clears all parameters from {@link #parameters}.</li>
-            *   <li>{@link #getParameterCount()} - Returns the number of parameters in {@link #parameters}.</li>
-            *   <li>{@link #getParameterKeys()} - Returns a set of all parameter keys from {@link #parameters}.</li>
-            *   <li>{@link #getParameterValues()} - Returns a collection of all parameter values from {@link #parameters}.</li>
-            *   <li>{@link #updateParameter(String, Object)} - Updates the value of an existing parameter in {@link #parameters}.</li>
-            * </ul>
-            *
-            * @author MeAlam
-            * @since 1.0.0
-            * @version 1.0.0
-              */
-            ```
-        - **Start with:** Start the Comment with A(n) {@code privacy/static/final} {@code/link Class/MethodType} [Description of the Class/Method].
-            - **Example for a Method**:
-              ```java
-              /**
-                * A {@code protected static void} that registers entity variants from specified locations.
-                * <p>
-                * This method attempts to load variants from both mod and datapack locations. It logs status information and
-                * handles exceptions that occur during the loading process.
-                * </p>
-                * <p>
-                * Parameters:
-                * <ul>
-                *   <li>{@code pFolderPath} {@link String} - The folder path location within the mod or datapack where variants are stored.</li>
-                *   <li>{@code pServer} {@link MinecraftServer} - The server instance of the current world.</li>
-                *   <li>{@code pModID} {@link String} - The mod ID used to locate the entity variant resources. (Use your Mod's ID)</li>
-                *   <li>{@code pEntityName} {@link String} - The entity name to load.</li>
-                * </ul>
-                *
-                * Exception Handling:
-                * <ul>
-                *   <li>{@link JsonParseException} - Thrown when there is an error parsing the JSON files.</li>
-                *   <li>{@link RuntimeException} - Thrown for unexpected errors during the registration process.</li>
-                * </ul>
-                *
-                * @param pFolderPath {@link String} - The folder path location within the mod or datapack where variants are stored.
-                * @param pServer     {@link MinecraftServer} - The server instance of the current world.
-                * @param pModID      {@link String} - The mod ID used to locate the entity variant resources. (Use your Mod's ID)
-                * @param pEntityName {@link String} - The entity name to load.
-                * @throws JsonParseException if there is an error parsing the JSON files.
-                * @throws RuntimeException   if an unexpected error occurs during the registration process.
-                * @author MeAlam
-                * @see MinecraftServer
-                * @see ResourceLocation
-                * @see VariantLoader
-                * @since 1.0.0
-                */
-                  protected static void registerEntityVariants(String pFolderPath, MinecraftServer pServer, String pModID, String pEntityName) {
-                }
-                ```
+#### Commenting steps:
 
-        - **Parameters**: Start each parameter description with `{@link TypeOfParameter} - [Comment]`. If the parameter is referenced within the comment, enclose it in a code block using `{@code}`.
-            - **Example for Parameters**:
-              ```java
-              /**
-               * A {@code public} {@link String} that retrieves the value of a custom parameter for a specific variant.
-               *
-               * @param pVariantName {@link String} - The variant name you want to see the custom parameter of.
-               * @param pParameterKey {@link String} - The parameter you want to see.
-               * @return The value of the custom parameter identified by {@code pParameterKey}
-               * for the variant specified by {@code pVariantName}.
-               * @author MeAlam
-               * @since 1.0.0
-               */
-               public String getCustomParameter(String pVariantName, String pParameterKey) {
-                    // Method implementation
-               }
-               ```
+#### 1. **Purpose**:
+- **What the code or section of code does.**
+- Clearly describe **why** this block of code exists and its primary function.
+
+#### 2. **When**:
+- Specify **when** this code is executed or what triggers it.
+
+#### 3. **Where**:
+- Indicate **where** this code resides or is invoked.
+
+#### 4. **Additional Information**:
+- Include any **important details** that will help someone understand the code's context or behavior.
+- Mention **dependencies**, assumptions, or any other relevant notes.
+
+#### 5. **Versioning**:
+- Include the `@since` tag to specify the version in which this code was introduced or modified.
+
+#### 6. **Author**:
+- Include the `@author` tag to specify who created the code.
+
+#### 7. **See**:
+- Use the `@see` tag to link to other classes, methods, or resources that are relevant to the code.
+
+
+#### Example Format:
+```java
+    /**
+ * Applies the Markdown feature to the provided component.
+ * <p>
+ * Purpose: This method checks whether the feature is enabled and applies the corresponding formatting to the given {@link MutableComponent}. If the feature is disabled, it logs an informational message and returns the original component.<br>
+ * When: The method is called when the Markdown feature needs to be applied to a component.<br>
+ * Where: It is called in the {@link MarkdownParser#parseMarkdown(Component)} method.<br>
+ * Additional Info: The method uses a {@link Pattern} to find text matching the specified prefix and suffix for Markdown formatting.<br>
+ * </p>
+ *
+ * @param pComponent The component to apply Markdown formatting to.
+ * @return The component with the applied Markdown formatting.
+ * @author MeAlam
+ * @see MarkdownParser#parseMarkdown(Component)
+ * @see MutableComponent
+ * @see Pattern
+ * @since 1.6.0
+ */
+public MutableComponent apply(MutableComponent pComponent) {
+    // Method implementation
+}
+```
+
+#### 8. **Classes**:
+- For classes, include a Key Methods section that lists out the main methods provided by the class.
+- Include the `@version` tag to indicate the version of the class.
+- **Example Format**:
+```java
+/**
+ * A class responsible for parsing and formatting Markdown into Minecraft's {@link Component}.
+ * <p>
+ * This class processes text components and applies Markdown-style formatting ({@link Bold}, {@link Italic}, {@link Strikethrough}, {@link Underline}, {@link Spoiler}, {@link Hyperlink}, {@link Color}, {@link CopyToClipboard})
+ * to the text. The formatting is controlled globally or individually through the {@link EnableMarkdownFor} and
+ * {@link DisableMarkdownFor} inner classes.
+ * </p>
+ * <p>
+ * Purpose: This class provides a utility for parsing and applying Markdown formatting in Minecraft chat messages.<br>
+ * When: This class is used when a message needs to be formatted with Markdown syntax.<br>
+ * Where: The class is invoked in various components where text formatting is required, typically in chat rendering or message construction.<br>
+ * Additional Info: The formatting can be enabled or disabled globally or selectively for specific features like bold or italic. The settings are managed via the {@link EnableMarkdownFor} and {@link DisableMarkdownFor} classes.
+ * </p>
+ * Key Methods:
+ * <ul>
+ * <li>{@link #parseMarkdown(Component)} - Parses and applies Markdown formatting to a given message component.</li>
+ * <li>{@link #enableMarkdown()} - Enables global Markdown formatting.</li>
+ * <li>{@link #disableMarkdown()} - Disables global Markdown formatting.</li>
+ * <li>{@link #enableMarkdownFor()} - Returns an instance of {@link EnableMarkdownFor} to enable specific Markdown features.</li>
+ * <li>{@link #disableMarkdownFor()} - Returns an instance of {@link DisableMarkdownFor} to disable specific Markdown features.</li>
+ * </ul>
+ *
+ * @author MeAlam
+ * @version 1.6.0
+ * @see EnableMarkdownFor
+ * @see DisableMarkdownFor
+ * @see Bold
+ * @see Italic
+ * @see Strikethrough
+ * @see Underline
+ * @see Spoiler
+ * @see Hyperlink
+ * @see Color
+ * @see CopyToClipboard
+ * @since 1.1.0
+ */
+public class MarkdownParser {
+    // Class implementation
+}
+```
 
 - **General Guidelines**:
-    - Always ensure that comments are clear, concise, and provide sufficient information to understand the code.
+    - Always ensure that comments are clear, concise, and provide enough information to understand the code.
     - When referencing variables or constants, use `{@code}` to wrap them within the comment.
     - Use `{@link}` to refer to classes, methods, or any other Java elements where appropriate.
     - Key Methods: In class-level comments, list out key methods provided by the class, which can help users quickly understand the main functionalities. 
     - Versioning: Include the `@since` tag in both class-level and method-level comments to indicate the version since which the class or method has been available.
-    - If you update a Class, please add/update the `@version` to indicate it has been changed.
+    - Update: If you update a Class, please add/update the `@version` to indicate it has been changed.
     - Copyright: Each file should start with `// Copyright (c) BlueLib. Licensed under the MIT License.`
     - Tags: Use `@see` to link to the correct Wiki Documentation page if it exists.
-    - Logging: Log every step using `BaseLogger.log`.
+    - Logging: Log steps using `BaseLogger.log`. Remember to add true as the last parameter to ensure it's a BlueLib log.
     - Error Handling: Always ensure that errors and warnings are logged using appropriate logging levels. Critical steps must be logged at least with `BaseLogger.log(BaseLogLevel.Error)` to keep a trail of execution.
 
 ### Deprecation
@@ -176,11 +180,11 @@
     - Before committing, test your changes by running the game using the appropriate test mod loader folder.
       - Use the `test` package to test your changes.
       - If no code is available to test, create new test code in the `test` package.
-      - Since modifying the existing test code is not recommended, adding Javadocs to comment out the test code is excessive and unnecessary.
+      - Since modifying the existing test code is not recommended, adding Javadocs to comment on the test code is excessive and unnecessary.
     - Ensure that your changes do not introduce any issues or regressions.
 
-7. **Run gradle tasks**
-    - To ensure everything is clean, run the gradle spotless tasks
+7. **Run Gradle tasks**
+    - To ensure everything is clean, run the Gradle spotless tasks
     - **Required**:
       ```bash
         gradlew spotlessApply
