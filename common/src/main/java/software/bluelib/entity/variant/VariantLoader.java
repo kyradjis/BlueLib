@@ -4,108 +4,108 @@ package software.bluelib.entity.variant;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.packs.resources.ResourceManager;
-import software.bluelib.interfaces.variant.base.IVariantEntityBase;
-import software.bluelib.json.JSONLoader;
-import software.bluelib.json.JSONMerger;
+import software.bluelib.json.JSONParser;
 import software.bluelib.utils.logging.BaseLogLevel;
 import software.bluelib.utils.logging.BaseLogger;
 import software.bluelib.utils.variant.ParameterUtils;
 
 /**
- * A {@code public class} that implements the {@link IVariantEntityBase} {@code interface} that manages the loading and storage of entity variants.
+ * A class for loading and managing entity variants.
  * <p>
- * The class handles loading and merging of JSON Data by utilizing the {@link JSONLoader} and {@link JSONMerger} classes. <br>
- * To load the Variants it loops through all resources in a folder and merges them into a single {@link JsonObject}. <br>
- * The merged JSON data is then parsed into {} instances and stored in {@link #AllVariants}. <br>
+ * Purpose: This class handles the loading and parsing of entity variants from JSON files.<br>
+ * When: The variants are loaded when the {@link #loadVariants(String, MinecraftServer, String)} method is called.<br>
+ * Where: The variants are stored in a static map and can be accessed globally.<br>
+ * Additional Info: This class extends {@link JSONParser} to utilize its JSON parsing capabilities.
  * </p>
  * Key Methods:
  * <ul>
- * <li>{@link #loadVariants(String, MinecraftServer, String)} - Loads and merges variant data by looping thru all resources in a folder.</li>
+ * <li>{@link #loadVariants(String, MinecraftServer, String)} - Loads variants from a specified folder path.</li>
+ * <li>{@link #parseVariants(String, JsonObject)} - Parses the loaded JSON data and stores the variants.</li>
  * </ul>
  *
  * @author MeAlam
- * @version 1.4.0
+ * @version 1.7.0
+ * @see JSONParser
+ * @see ParameterUtils
+ * @see BaseLogger
  * @since 1.0.0
  */
-public class VariantLoader implements IVariantEntityBase {
+public class VariantLoader extends JSONParser {
 
     /**
-     * A {@code public static} {@link Map} that stores all variants of an entity.
+     * A map to store all loaded variants.
      * <p>
-     * The field is used to store all variants of an entity and is accessed by the {@link ParameterUtils} class.
+     * Purpose: This map holds all the variants loaded from JSON files, keyed by entity name.<br>
+     * When: Populated when the {@link #loadVariants(String, MinecraftServer, String)} method is called.<br>
+     * Where: Used globally to access the loaded variants.<br>
+     * Additional Info: The map is static to allow global access.
      * </p>
-     * <br>
-     * <strong>We don't recommend using this field directly unless you know what you are doing.</strong>
      *
+     * @see #loadVariants(String, MinecraftServer, String)
+     * @see #parseVariants(String, JsonObject)
      * @since 1.3.0
      */
-    public static Map<String, JsonObject> AllVariants = new HashMap<>();
+    public static final Map<String, JsonObject> AllVariants = new HashMap<>();
 
     /**
-     * A {@code private static final} {@link JSONLoader} to load JSON data from resources.
-     *
-     * @since 1.0.0
-     */
-    private static final JSONLoader jsonLoader = new JSONLoader();
-
-    /**
-     * A {@code private static final} {@link JSONMerger} to merge JSON data.
+     * A singleton instance of the VariantLoader.
      * <p>
-     * This {@link JSONMerger} instance is used to merge JSON data into a single {@link JsonObject}.
+     * Purpose: This instance is used to load and parse JSON data.<br>
+     * When: Initialized when the class is loaded.<br>
+     * Where: Used internally within the class methods.<br>
+     * Additional Info: Ensures only one instance of VariantLoader is used.
      * </p>
      *
-     * @since 1.0.0
+     * @see #loadVariants(String, MinecraftServer, String)
+     * @since 1.7.0
      */
-    private static final JSONMerger jsonMerger = new JSONMerger();
+    private static final VariantLoader LOADER = new VariantLoader();
 
     /**
-     * A {@code public static void} that loads and merges variant data from JSON resources in the specified folder path.
+     * Loads variants from the specified folder path.
      * <p>
-     * The method loops through all resources in the folder and merges them into a single {@link JsonObject}. <br>
-     * The merged JSON data is then parsed into {@link JsonObject} instances and stored in {@link #AllVariants}. <br>
+     * Purpose: This method loads JSON data from the specified folder path and parses the variants.<br>
+     * When: Called when variants need to be loaded for a specific entity.<br>
+     * Where: Typically invoked during server initialization or entity configuration.<br>
+     * Additional Info: The loaded variants are stored in the {@link #AllVariants} map.
      * </p>
      *
-     * @param pFolderPath {@link String} - The path to the folder containing JSON resources.
-     * @param pServer     {@link MinecraftServer} - The {@link MinecraftServer} instance used to access resources.
-     * @param pEntityName {@link String} - The name of the entity whose variants should be cleared before loading new ones.
+     * @param pFolderPath The folder path to load JSON data from.
+     * @param pServer     The Minecraft server instance.
+     * @param pEntityName The name of the entity to load variants for.
      * @author MeAlam
+     * @see #AllVariants
+     * @see #parseVariants(String, JsonObject)
+     * @see JSONParser#loadData(String, MinecraftServer)
+     * @see JSONParser#getDataMap()
      * @since 1.0.0
      */
     public static void loadVariants(String pFolderPath, MinecraftServer pServer, String pEntityName) {
-        ResourceManager resourceManager = pServer.getResourceManager();
-        JsonObject mergedJsonObject = new JsonObject();
-
-        Collection<ResourceLocation> collection = resourceManager.listResources(pFolderPath, pFiles -> pFiles.getPath().endsWith(".json")).keySet();
-
-        BaseLogger.log(BaseLogLevel.INFO, "Found resources: " + collection + " at: " + pFolderPath + " for: " + pEntityName, true);
-
-        for (ResourceLocation resourceLocation : collection) {
-            try {
-                BaseLogger.log(BaseLogLevel.INFO, "Loading JSON data from resource: " + resourceLocation.toString(), true);
-                JsonObject jsonObject = jsonLoader.loadJson(resourceLocation, resourceManager);
-                jsonMerger.mergeJsonObjects(mergedJsonObject, jsonObject);
-            } catch (Exception pException) {
-                BaseLogger.log(BaseLogLevel.ERROR, "Failed to load JSON data from resource: " + resourceLocation.toString(), pException, true);
-            }
-        }
-        parseVariants(pEntityName, mergedJsonObject);
+        LOADER.loadData(pFolderPath, pServer);
+        AllVariants.putAll(LOADER.getDataMap());
+        parseVariants(pEntityName, LOADER.getMergedJsonObject());
+        BaseLogger.log(BaseLogLevel.INFO, "All data of Variants: " + AllVariants, true);
     }
 
     /**
-     * A {@code private static void} that parses the merged {@link JsonObject} containing variant data.
+     * Parses the loaded JSON data and stores the variants.
      * <p>
-     * The method parses the merged {@link JsonObject} and stores the data in the {@link #AllVariants} map.
-     * The map is used to store all variants of an entity.
+     * Purpose: This method parses the JSON data and stores the variants in the {@link #AllVariants} map.<br>
+     * When: Called internally after loading the JSON data.<br>
+     * Where: Invoked within the {@link #loadVariants(String, MinecraftServer, String)} method.<br>
+     * Additional Info: The parsed variants are logged for debugging purposes.
      * </p>
      *
-     * @param pJsonObject {@link JsonObject} - The merged {@link JsonObject} containing variant data.
+     * @param pEntityName The name of the entity to parse variants for.
+     * @param pJsonObject The JSON object containing the variant data.
      * @author MeAlam
+     * @see #AllVariants
+     * @see #loadVariants(String, MinecraftServer, String)
+     * @see ParameterUtils#getAllEntities()
+     * @see ParameterUtils#getVariantsOfEntity(String)
      * @since 1.0.0
      */
     private static void parseVariants(String pEntityName, JsonObject pJsonObject) {
