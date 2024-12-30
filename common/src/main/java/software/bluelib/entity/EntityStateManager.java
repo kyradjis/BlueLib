@@ -4,16 +4,18 @@ package software.bluelib.entity;
 import java.util.HashMap;
 import java.util.Map;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 
 /**
  * Manages the state of entities in the BlueLib library.
  * <p>
- * Purpose: This class provides methods to manage the flying state, flying capabilities, and flight cooldowns of entities.<br>
+ * Purpose: This class provides methods and data structures to manage various aspects of entity behavior and mechanics, including flying, swimming and taming.<br>
  * When: These methods are invoked during interactions or gameplay mechanics for entities.<br>
  * Where: This class is used by other classes to manage entity states.<br>
  * Additional Info: The class uses maps to store and retrieve the state information for entities.
  * </p>
  * Key Methods:
+ * @author MeAlam
  * <ul>
  * <li>{@link #getFlyingState(LivingEntity)} - Retrieves the flying state of the entity.</li>
  * <li>{@link #setFlyingState(LivingEntity, boolean)} - Sets the flying state of the entity.</li>
@@ -23,9 +25,29 @@ import net.minecraft.world.entity.LivingEntity;
  * <li>{@link #setFlyingCooldown(LivingEntity, int)} - Sets the cooldown period between flights for the entity.</li>
  * </ul>
  *
- * @author MeAlam
+ * @author Kyradjis
+ * <ul>
+ * <li>{@link #getSwimmingState(LivingEntity)} - Retrieves the swimming state of the entity.</li>
+ * <li>{@link #setSwimmingState(LivingEntity, boolean)} - Updates the swimming state of the entity.</li>
+ * <li>{@link #getSwimmingCooldown(LivingEntity)} - Retrieves the swimming cooldown period of the entity.</li>
+ * <li>{@link #setSwimmingCooldown(LivingEntity, int)} - Updates the swimming cooldown period of the entity.</li>
+ * <li>{@link #getTamingState(LivingEntity)} - Retrieves the taming state of the entity.</li>
+ * <li>{@link #setTamingState(LivingEntity, boolean)} - Updates the taming state of the entity.</li>
+ * <li>{@link #getEntityOwner(LivingEntity)} - Retrieves the owner of the entity.</li>
+ * <li>{@link #getOwnerTransferingState(LivingEntity)} - Retrieves the ownership transferring state of the entity.</li>
+ * <li>{@link #setOwnerTransferingState(LivingEntity, boolean)} - Updates the ownership transferring state of the entity.</li>
+ * <li>{@link #getTamingItem(LivingEntity)} - Retrieves the taming item associated with the entity.</li>
+ * <li>{@link #setTamingItem(LivingEntity, String)} - Updates the taming item for the entity.</li>
+ * <li>{@link #getFollowingState(LivingEntity)} - Retrieves the following state of the entity.</li>
+ * <li>{@link #setFollowingState(LivingEntity, boolean)} - Updates the following state of the entity.</li>
+ * <li>{@link #getLoyaltyLevel(LivingEntity)} - Retrieves the loyalty level of the entity.</li>
+ * <li>{@link #setLoyaltyLevel(LivingEntity, int)} - Updates the loyalty level of the entity.</li>
+ * </ul>
+ *
  * @version 1.7.0
  * @see software.bluelib.interfaces.entity.IFlyingEntity
+ * @see software.bluelib.interfaces.entity.ISwimmingEntity
+ * @see software.bluelib.interfaces.entity.ITameableEntity
  * @see LivingEntity
  * @see Boolean
  * @see HashMap
@@ -33,6 +55,7 @@ import net.minecraft.world.entity.LivingEntity;
  * @see Integer
  * @since 1.7.0
  */
+
 public class EntityStateManager {
 
     // Flying States
@@ -232,4 +255,469 @@ public class EntityStateManager {
     public static void setFlyingCooldown(LivingEntity pEntity, int pCooldown) {
         flyingCooldownMap.put(pEntity, pCooldown);
     }
+
+    // Swimming States
+    /**
+     * A map to store the swimming state of entities.
+     * <p>
+     * Purpose: This map holds the swimming state of entities, indicating whether they are currently swimming.<br>
+     * When: The map is populated or accessed when {@link #getSwimmingState(LivingEntity)} or {@link #setSwimmingState(LivingEntity, boolean)} is invoked.<br>
+     * Where: Used to manage and track the swimming state of entities in the system.<br>
+     * Additional Info: The keys are {@link LivingEntity} instances, and the values are {@code Boolean} values representing their swimming state.
+     * </p>
+     * @author Kyradjis
+     * @see LivingEntity
+     * @see Boolean
+     * @since 1.7.0
+     */
+    private static final Map<LivingEntity, Boolean> swimmingStateMap = new HashMap<>();
+
+
+    /**
+     * Retrieves the swimming state of the specified entity.
+     * <p>
+     * Purpose: Determines whether the given {@link LivingEntity} is currently swimming.<br>
+     * When: Invoked during checks or interactions involving the entity's swimming behavior.<br>
+     * Where: Used in gameplay mechanics or AI logic requiring validation of swimming state.<br>
+     * Additional Info: If the swimming state is not set, the method returns {@code false} by default.
+     * </p>
+     *
+     * @param pEntity The {@link LivingEntity} whose swimming state is to be retrieved.
+     * @return {@code true} if the entity is swimming; {@code false} otherwise.
+     * @author Kyradjis
+     * @see #swimmingStateMap
+     * @see LivingEntity
+     * @since 1.7.0
+     */
+    public static boolean getSwimmingState(LivingEntity pEntity) {
+        return swimmingStateMap.getOrDefault(pEntity, false);
+    }
+
+
+    /**
+     * Sets the swimming state for the specified entity.
+     * <p>
+     * Purpose: Updates the swimming state of the given {@link LivingEntity}.<br>
+     * When: Invoked during gameplay events or interactions that affect the swimming behavior of an entity.<br>
+     * Where: Used to control and manage swimming-related mechanics for entities.<br>
+     * Additional Info: The swimming state is stored in the {@link #swimmingStateMap}.
+     * </p>
+     *
+     * @param pEntity The {@link LivingEntity} whose swimming state is to be updated.
+     * @param pState  {@code true} to set the entity as swimming; {@code false} otherwise.
+     * @author Kyradjis
+     * @see #swimmingStateMap
+     * @see LivingEntity
+     * @since 1.7.0
+     */
+    public static void setSwimmingState(LivingEntity pEntity, boolean pState) {
+        swimmingStateMap.put(pEntity, pState);
+    }
+
+
+    // Swimming Cooldowns
+    /**
+     * A map to store the swimming cooldown period of entities.
+     * <p>
+     * Purpose: This map tracks the cooldown period for entities, limiting how frequently they can swim.<br>
+     * When: The map is populated or accessed when {@link #getSwimmingCooldown(LivingEntity)} or {@link #setSwimmingCooldown(LivingEntity, int)} is invoked.<br>
+     * Where: Used to manage and enforce swimming cooldown mechanics for entities.<br>
+     * Additional Info: The keys are {@link LivingEntity} instances, and the values are {@code Integer} values representing the cooldown period in seconds.
+     * </p>
+     *
+     * @author Kyradjis
+     * @see LivingEntity
+     * @see Integer
+     * @since 1.7.0
+     */
+    private static final Map<LivingEntity, Integer> swimmingCooldownMap = new HashMap<>();
+
+
+    /**
+     * Retrieves the swimming cooldown period for the specified entity.
+     * <p>
+     * Purpose: Returns the cooldown duration that limits how frequently the given {@link LivingEntity} can swim.<br>
+     * When: Invoked during checks or calculations involving swimming cooldowns.<br>
+     * Where: Used in gameplay systems that manage swimming intervals for entities.<br>
+     * Additional Info: If no cooldown is set for the entity, the method returns a default value of {@code 1}.
+     * </p>
+     *
+     * @param pEntity The {@link LivingEntity} whose swimming cooldown is to be retrieved.
+     * @return The swimming cooldown period as an {@code int}, representing the duration in seconds.
+     * @author Kyradjis
+     * @see #swimmingCooldownMap
+     * @see LivingEntity
+     * @since 1.7.0
+     */
+    public static int getSwimmingCooldown(LivingEntity pEntity) {
+        return swimmingCooldownMap.getOrDefault(pEntity, 1);
+    }
+
+
+    /**
+     * Sets the swimming cooldown period for the specified entity.
+     * <p>
+     * Purpose: Updates the cooldown duration that limits how frequently the given {@link LivingEntity} can swim.<br>
+     * When: Called during interactions or gameplay events that modify the swimming cooldown of an entity.<br>
+     * Where: Used to enforce or adjust swimming intervals in gameplay mechanics.<br>
+     * Additional Info: The cooldown period is stored in the {@link #swimmingCooldownMap}.
+     * </p>
+     *
+     * @param pEntity   The {@link LivingEntity} whose swimming cooldown is to be set.
+     * @param pCooldown The swimming cooldown period as an {@code int}, representing the duration in seconds.
+     * @author Kyradjis
+     * @see #swimmingCooldownMap
+     * @see LivingEntity
+     * @since 1.7.0
+     */
+    public static void setSwimmingCooldown(LivingEntity pEntity, int pCooldown) {
+        swimmingCooldownMap.put(pEntity, pCooldown);
+    }
+
+
+    // Taming State
+    /**
+     * A map to store the taming state of entities.
+     * <p>
+     * Purpose: This map tracks whether entities have been tamed.<br>
+     * When: The map is populated or accessed when {@link #getTamingState(LivingEntity)} or {@link #setTamingState(LivingEntity, boolean)} is invoked.<br>
+     * Where: Used to manage and validate taming mechanics for entities.<br>
+     * Additional Info: The keys are {@link LivingEntity} instances, and the values are {@code Boolean} values indicating their taming state.
+     * </p>
+     *
+     * @author Kyradjis
+     * @see LivingEntity
+     * @see Boolean
+     * @since 1.7.0
+     */
+    private static final Map<LivingEntity, Boolean> tamingStateMap = new HashMap<>();
+
+
+    /**
+     * Retrieves the taming state of the specified entity.
+     * <p>
+     * Purpose: Determines whether the given {@link LivingEntity} has been tamed.<br>
+     * When: Invoked during checks or interactions involving the taming status of an entity.<br>
+     * Where: Used in gameplay systems or AI logic that depend on taming validation.<br>
+     * Additional Info: If no taming state is set for the entity, the method returns {@code false} by default.
+     * </p>
+     *
+     * @param pEntity The {@link LivingEntity} whose taming state is to be retrieved.
+     * @return {@code true} if the entity is tamed; {@code false} otherwise.
+     * @author Kyradjis
+     * @see #tamingStateMap
+     * @see LivingEntity
+     * @since 1.7.0
+     */
+    public static boolean getTamingState(LivingEntity pEntity) {
+        return tamingStateMap.getOrDefault(pEntity, false);
+    }
+
+
+    /**
+     * Sets the taming state for the specified entity.
+     * <p>
+     * Purpose: Updates the taming state of the given {@link LivingEntity}.<br>
+     * When: Called during interactions or events that modify the taming status of an entity.<br>
+     * Where: Used in gameplay systems to manage taming mechanics.<br>
+     * Additional Info: The taming state is stored in the {@link #tamingStateMap}.
+     * </p>
+     *
+     * @param pEntity The {@link LivingEntity} whose taming state is to be updated.
+     * @param pState  {@code true} to mark the entity as tamed; {@code false} otherwise.
+     * @author Kyradjis
+     * @see #tamingStateMap
+     * @see LivingEntity
+     * @since 1.7.0
+     */
+    public static void setTamingState(LivingEntity pEntity, boolean pState) {
+        tamingStateMap.put(pEntity, pState);
+    }
+
+
+    // Owner of Entity
+
+    /**
+     * A map to store the owner of entities.
+     * <p>
+     * Purpose: This map tracks the ownership of entities, associating each {@link LivingEntity} with its {@link Player} owner.<br>
+     * When: The map is populated or accessed when {@link #getEntityOwner(LivingEntity)} is invoked.<br>
+     * Where: Used to manage and validate ownership mechanics for entities.<br>
+     * Additional Info: The keys are {@link LivingEntity} instances, and the values are {@link Player} objects representing their owners.
+     * </p>
+     *
+     * @author Kyradjis
+     * @see LivingEntity
+     * @see Player
+     * @since 1.7.0
+     */
+    private static final Map<LivingEntity, Player> entityOwnerMap = new HashMap<>();
+
+
+    /**
+     * Retrieves the owner of the specified entity.
+     * <p>
+     * Purpose: Returns the {@link Player} who owns the given {@link LivingEntity}.<br>
+     * When: Called during interactions or gameplay that require validation or use of ownership information.<br>
+     * Where: Used in mechanics that depend on entity ownership.<br>
+     * Additional Info: If the entity does not have an owner, the method returns {@code null}.
+     * </p>
+     *
+     * @param pEntity The {@link LivingEntity} whose owner is to be retrieved.
+     * @return The {@link Player} who owns the entity, or {@code null} if no owner is set for the entity.
+     * @author Kyradjis
+     * @see #entityOwnerMap
+     * @see LivingEntity
+     * @see Player
+     * @since 1.7.0
+     */
+    public static Player getEntityOwner(LivingEntity pEntity) {
+        return entityOwnerMap.getOrDefault(pEntity, null);
+    }
+
+
+    // Ownership Transfering
+
+    /**
+     * A map to store the ownership transferring state of entities.
+     * <p>
+     * Purpose: This map tracks whether the ownership of a {@link LivingEntity} is currently being transferred.<br>
+     * When: The map is populated or accessed when {@link #getOwnerTransferingState(LivingEntity)} or {@link #setOwnerTransferingState(LivingEntity, boolean)} is invoked.<br>
+     * Where: Used to manage and validate ownership transfer mechanics for entities.<br>
+     * Additional Info: The keys are {@link LivingEntity} instances, and the values are {@code Boolean} values indicating the ownership transferring state.
+     * </p>
+     *
+     * @author Kyradjis
+     * @see LivingEntity
+     * @see Boolean
+     * @since 1.7.0
+     */
+    private static final Map<LivingEntity, Boolean> ownershipTransferingMap = new HashMap<>();
+
+
+    /**
+     * Retrieves the ownership transferring state of the specified entity.
+     * <p>
+     * Purpose: Determines whether the ownership of the given {@link LivingEntity} is currently being transferred.<br>
+     * When: Invoked during checks or interactions that require validation of ownership transfer state.<br>
+     * Where: Used in gameplay mechanics involving ownership changes.<br>
+     * Additional Info: If no state is set for the entity, the method returns {@code false} by default.
+     * </p>
+     *
+     * @param pEntity The {@link LivingEntity} whose ownership transferring state is to be retrieved.
+     * @return {@code true} if the entity is in the process of ownership transfer; {@code false} otherwise.
+     * @author Kyradjis
+     * @see #ownershipTransferingMap
+     * @see LivingEntity
+     * @since 1.7.0
+     */
+    public static boolean getOwnerTransferingState(LivingEntity pEntity) {
+        return ownershipTransferingMap.getOrDefault(pEntity, false);
+    }
+
+
+    /**
+     * Sets the ownership transferring state for the specified entity.
+     * <p>
+     * Purpose: Updates whether the ownership of the given {@link LivingEntity} is currently being transferred.<br>
+     * When: Called during gameplay events or interactions that modify the ownership transferring state of an entity.<br>
+     * Where: Used to manage mechanics related to ownership changes.<br>
+     * Additional Info: The transferring state is stored in the {@link #ownershipTransferingMap}.
+     * </p>
+     *
+     * @param pEntity The {@link LivingEntity} whose ownership transferring state is to be updated.
+     * @param pState  {@code true} to mark the entity as in the process of ownership transfer; {@code false} otherwise.
+     * @author Kyradjis
+     * @see #ownershipTransferingMap
+     * @see LivingEntity
+     * @since 1.7.0
+     */
+    public static void setOwnerTransferingState(LivingEntity pEntity, boolean pState) {
+        ownershipTransferingMap.put(pEntity, pState);
+    }
+
+
+    // Taming Item
+
+    /**
+     * A map to store the taming item associated with entities.
+     * <p>
+     * Purpose: This map tracks the specific taming item required for each {@link LivingEntity}.<br>
+     * When: The map is populated or accessed when {@link #getTamingItem(LivingEntity)} or {@link #setTamingItem(LivingEntity, String)} is invoked.<br>
+     * Where: Used to manage and validate taming mechanics based on specific items.<br>
+     * Additional Info: The keys are {@link LivingEntity} instances, and the values are {@link String} objects representing the taming items.
+     * </p>
+     *
+     * @author Kyradjis
+     * @see LivingEntity
+     * @see String
+     * @since 1.7.0
+     */
+    private static final Map<LivingEntity, String> tamingItemMap = new HashMap<>();
+
+
+    /**
+     * Retrieves the taming item associated with the specified entity.
+     * <p>
+     * Purpose: Returns the {@link String} representation of the item required to tame the given {@link LivingEntity}.<br>
+     * When: Invoked during interactions or checks that require validation of the entity's taming item.<br>
+     * Where: Used in taming mechanics or gameplay systems that enforce item-based taming.<br>
+     * Additional Info: If no taming item is set for the entity, the method returns {@code null}.
+     * </p>
+     *
+     * @param pEntity The {@link LivingEntity} whose taming item is to be retrieved.
+     * @return The taming item as a {@link String}, or {@code null} if no item is set for the entity.
+     * @author Kyradjis
+     * @see #tamingItemMap
+     * @see LivingEntity
+     * @see String
+     * @since 1.7.0
+     */
+    public static String getTamingItem(LivingEntity pEntity) {
+        return tamingItemMap.getOrDefault(pEntity, null);
+    }
+
+
+    /**
+     * Sets the taming item for the specified entity.
+     * <p>
+     * Purpose: Updates the item required to tame the given {@link LivingEntity}.<br>
+     * When: Called during interactions or events that define or modify the taming requirements for an entity.<br>
+     * Where: Used to manage taming mechanics based on specific items.<br>
+     * Additional Info: The taming item is stored in the {@link #tamingItemMap}.
+     * </p>
+     *
+     * @param pEntity The {@link LivingEntity} whose taming item is to be set.
+     * @param pItem   The taming item as a {@link String} to associate with the entity.
+     * @author Kyradjis
+     * @see #tamingItemMap
+     * @see LivingEntity
+     * @see String
+     * @since 1.7.0
+     */
+    public static void setTamingItem(LivingEntity pEntity, String pItem) {
+        tamingItemMap.put(pEntity, pItem);
+    }
+
+
+    // Owner Following
+
+    /**
+     * A map to store the owner-following state of entities.
+     * <p>
+     * Purpose: This map tracks whether entities are currently following their owner.<br>
+     * When: The map is populated or accessed when {@link #getFollowingState(LivingEntity)} is invoked.<br>
+     * Where: Used to manage and validate entity behavior related to following their owner.<br>
+     * Additional Info: The keys are {@link LivingEntity} instances, and the values are {@code Boolean} values representing their following state.
+     * </p>
+     *
+     * @author Kyradjis
+     * @see LivingEntity
+     * @see Boolean
+     * @since 1.7.0
+     */
+    private static final Map<LivingEntity, Boolean> ownerFollowingStateMap = new HashMap<>();
+
+
+    /**
+     * Retrieves the owner-following state of the specified entity.
+     * <p>
+     * Purpose: Determines whether the given {@link LivingEntity} is currently following its owner.<br>
+     * When: Invoked during interactions or gameplay checks involving the entity's following behavior.<br>
+     * Where: Used in gameplay systems or AI logic to validate or enforce following mechanics.<br>
+     * Additional Info: If no following state is set for the entity, the method returns {@code false} by default.
+     * </p>
+     *
+     * @param pEntity The {@link LivingEntity} whose following state is to be retrieved.
+     * @return {@code true} if the entity is following its owner; {@code false} otherwise.
+     * @author Kyradjis
+     * @see #ownerFollowingStateMap
+     * @see LivingEntity
+     * @since 1.7.0
+     */
+    public static boolean getFollowingState(LivingEntity pEntity) {
+        return ownerFollowingStateMap.getOrDefault(pEntity, false);
+    }
+
+
+    /**
+     * Sets the owner-following state for the specified entity.
+     * <p>
+     * Purpose: Updates whether the given {@link LivingEntity} is following its owner.<br>
+     * When: Called during gameplay events or interactions that modify the following behavior of an entity.<br>
+     * Where: Used to manage following mechanics for entities.<br>
+     * Additional Info: The following state is stored in the {@link #ownerFollowingStateMap}.
+     * </p>
+     *
+     * @param pEntity The {@link LivingEntity} whose following state is to be updated.
+     * @param pState  {@code true} to set the entity as following its owner; {@code false} otherwise.
+     * @author Kyradjis
+     * @see #ownerFollowingStateMap
+     * @see LivingEntity
+     * @since 1.7.0
+     */
+    public static void setFollowingState(LivingEntity pEntity, boolean pState) {
+        ownerFollowingStateMap.put(pEntity, pState);
+    }
+
+
+    // Loyalty Level
+    /**
+     * A map to store the loyalty levels of entities.
+     * <p>
+     * Purpose: This map tracks the loyalty level of each {@link LivingEntity}, representing its devotion to its owner.<br>
+     * When: The map is populated or accessed when {@link #getLoyaltyLevel(LivingEntity)} or {@link #setLoyaltyLevel(LivingEntity, int)} is invoked.<br>
+     * Where: Used to manage loyalty-based mechanics for entities.<br>
+     * Additional Info: The keys are {@link LivingEntity} instances, and the values are {@code Integer} values representing their loyalty level.
+     * </p>
+     *
+     * @author Kyradjis
+     * @see LivingEntity
+     * @see Integer
+     * @since 1.7.0
+     */
+    private static final Map<LivingEntity, Integer> loyaltyLevelMap = new HashMap<>();
+
+
+    /**
+     * Retrieves the loyalty level of the specified entity.
+     * <p>
+     * Purpose: Returns the loyalty level of the given {@link LivingEntity}, representing its devotion to its owner.<br>
+     * When: Invoked during checks or interactions involving loyalty-based mechanics.<br>
+     * Where: Used in gameplay systems that depend on entity loyalty.<br>
+     * Additional Info: If no loyalty level is set for the entity, the method returns a default value of {@code 5}.
+     * </p>
+     *
+     * @param pEntity The {@link LivingEntity} whose loyalty level is to be retrieved.
+     * @return The loyalty level of the entity as an {@code int} value. Default is {@code 5}.
+     * @author Kyradjis
+     * @see #loyaltyLevelMap
+     * @see LivingEntity
+     * @since 1.7.0
+     */
+    public static int getLoyaltyLevel(LivingEntity pEntity) {
+        return loyaltyLevelMap.getOrDefault(pEntity, 5);
+    }
+
+
+    /**
+     * Sets the loyalty level for the specified entity.
+     * <p>
+     * Purpose: Updates the loyalty level of the given {@link LivingEntity}, representing its devotion to its owner.<br>
+     * When: Called during gameplay events or interactions that modify the loyalty of an entity.<br>
+     * Where: Used to manage loyalty-based mechanics for entities.<br>
+     * Additional Info: The loyalty level is stored in the {@link #loyaltyLevelMap}.
+     * </p>
+     *
+     * @param pEntity The {@link LivingEntity} whose loyalty level is to be updated.
+     * @param pLevel  The loyalty level as an {@code int} value to associate with the entity.
+     * @author Kyradjis
+     * @see #loyaltyLevelMap
+     * @see LivingEntity
+     * @since 1.7.0
+     */
+    public static void setLoyaltyLevel(LivingEntity pEntity, int pLevel) {
+        loyaltyLevelMap.put(pEntity, pLevel);
+    }
+
 }
