@@ -1,6 +1,14 @@
 // Copyright (c) BlueLib. Licensed under the MIT License.
 package software.bluelib.interfaces.entity;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import software.bluelib.entity.EntityStateManager;
+import software.bluelib.utils.logging.BaseLogLevel;
+import software.bluelib.utils.logging.BaseLogger;
+
 /**
  * An interface for flying entities in the BlueLib library.
  * <p>
@@ -11,21 +19,23 @@ package software.bluelib.interfaces.entity;
  * </p>
  * Key Methods:
  * <ul>
- * <li>{@link #getFlyingState()} - Retrieves the flying state of the entity.</li>
- * <li>{@link #setFlyingState(boolean)} - Sets the flying state of the entity.</li>
- * <li>{@link #getFlyingSpeedMultiplier()} - Retrieves the speed multiplier for the entity while flying.</li>
- * <li>{@link #setFlyingSpeedMultiplier(double)} - Sets the speed multiplier for the entity while flying.</li>
- * <li>{@link #canFly()} - Checks if the entity is capable of flight.</li>
- * <li>{@link #getFlightCooldown()} - Retrieves the cooldown period between flights.</li>
- * <li>{@link #setFlightCooldown(int)} - Sets the cooldown period between flights.</li>
- * <li>{@link #getAltitude()} - Retrieves the current altitude of the entity.</li>
- * <li>{@link #setAltitude(int)} - Sets the altitude of the entity.</li>
+ * <li>{@link #getFlyingState(LivingEntity)} - Retrieves the flying state of the entity.</li>
+ * <li>{@link #setFlyingState(LivingEntity, boolean)} - Sets the flying state of the entity.</li>
+ * <li>{@link #getFlyingSpeedMultiplier(LivingEntity)} - Retrieves the speed multiplier for the entity while flying.</li>
+ * <li>{@link #setFlyingSpeedMultiplier(LivingEntity, double)} - Sets the speed multiplier for the entity while flying.</li>
+ * <li>{@link #canFly(LivingEntity)} - Checks if the entity is capable of flight.</li>
+ * <li>{@link #getFlightCooldown(LivingEntity)} - Retrieves the cooldown period between flights.</li>
+ * <li>{@link #setFlightCooldown(LivingEntity, int)} - Sets the cooldown period between flights.</li>
+ * <li>{@link #getAltitude(LivingEntity)} - Retrieves the current altitude of the entity.</li>
  * </ul>
  *
  * @author Kyradjis
  * @version 1.7.0
+ * @see EntityStateManager
+ * @see LivingEntity
  * @since 1.7.0
  */
+@SuppressWarnings("unused")
 public interface IFlyingEntity {
 
     /**
@@ -37,12 +47,12 @@ public interface IFlyingEntity {
      * </p>
      *
      * @return {@code true} if the entity is flying; {@code false} otherwise.
-     * @author Kyradjis
+     * @see EntityStateManager
+     * @see LivingEntity
      * @since 1.7.0
-     * @version 1.7.0
      */
-    default boolean getFlyingState() {
-        return false;
+    default boolean getFlyingState(LivingEntity pEntity) {
+        return EntityStateManager.getFlyingState(pEntity);
     }
 
     /**
@@ -54,11 +64,12 @@ public interface IFlyingEntity {
      * </p>
      *
      * @param pFlying {@code true} to set the entity as flying; {@code false} otherwise.
-     * @author Kyradjis
+     * @see EntityStateManager
+     * @see LivingEntity
      * @since 1.7.0
-     * @version 1.7.0
      */
-    default void setFlyingState(boolean pFlying) {
+    default void setFlyingState(LivingEntity pEntity, boolean pFlying) {
+        EntityStateManager.setFlyingState(pEntity, pFlying);
     }
 
     /**
@@ -69,13 +80,15 @@ public interface IFlyingEntity {
      * Where: Used in movement logic.<br>
      * </p>
      *
+     * @param pEntity The entity for which to retrieve the flying speed multiplier.
      * @return The flying speed multiplier as a {@code double}.
      * @author Kyradjis
+     * @see EntityStateManager
+     * @see LivingEntity
      * @since 1.7.0
-     * @version 1.7.0
      */
-    default double getFlyingSpeedMultiplier() {
-        return 1.0;
+    default double getFlyingSpeedMultiplier(LivingEntity pEntity) {
+        return pEntity.getAttributeValue(Attributes.FLYING_SPEED);
     }
 
     /**
@@ -86,12 +99,21 @@ public interface IFlyingEntity {
      * Where: Used in methods controlling movement mechanics.<br>
      * </p>
      *
-     * @param pFlyingSpeedMultiplier The desirable flying speed multiplier as a {@code double}.
+     * @param pEntity          The entity for which to set the flying speed multiplier.
+     * @param pSpeedMultiplier The flying speed multiplier as a {@code double}.
      * @author Kyradjis
+     * @see EntityStateManager
+     * @see LivingEntity
      * @since 1.7.0
-     * @version 1.7.0
      */
-    default void setFlyingSpeedMultiplier(double pFlyingSpeedMultiplier) {
+    default void setFlyingSpeedMultiplier(LivingEntity pEntity, double pSpeedMultiplier) {
+        AttributeInstance flyingSpeedAttribute = pEntity.getAttribute(Attributes.FLYING_SPEED);
+        if (flyingSpeedAttribute != null) {
+            flyingSpeedAttribute.setBaseValue(pSpeedMultiplier);
+        } else {
+            BaseLogger.log(BaseLogLevel.ERROR, pEntity + " does not have a flying speed attribute.", true);
+            throw new IllegalStateException(pEntity + " does not have a flying speed attribute.");
+        }
     }
 
     /**
@@ -104,11 +126,30 @@ public interface IFlyingEntity {
      *
      * @return {@code true} if the entity can fly; {@code false} otherwise (e.g. when the entity is a baby).
      * @author Kyradjis
+     * @see EntityStateManager
+     * @see LivingEntity
      * @since 1.7.0
-     * @version 1.7.0
      */
-    default boolean canFly() {
-        return false;
+    default boolean canFly(LivingEntity pEntity) {
+        return EntityStateManager.getCanFly(pEntity);
+    }
+
+    /**
+     * Sets whether the entity can fly.
+     * <p>
+     * Purpose: Updates the entity's ability to fly.<br>
+     * When: Invoked during gameplay or entity configuration.<br>
+     * Where: Used in methods controlling flight mechanics.<br>
+     * </p>
+     *
+     * @param pCanFly {@code true} to enable flight for the entity; {@code false} otherwise.
+     * @author MeAlam
+     * @see EntityStateManager
+     * @see LivingEntity
+     * @since 1.7.0
+     */
+    default void canFly(LivingEntity pEntity, boolean pCanFly) {
+        EntityStateManager.setCanFly(pEntity, pCanFly);
     }
 
     /**
@@ -117,15 +158,17 @@ public interface IFlyingEntity {
      * Purpose: Indicates the amount of time (in seconds) the entity must wait before flying again.<br>
      * When: Called during flight cooldown checks.<br>
      * Where: Used in gameplay mechanics.<br>
+     * Additional Info: The library does not enforce the cooldown period; it is up to the developer to manage flight cooldowns.<br>
      * </p>
      *
      * @return The flight cooldown period (in seconds) as an {@code int}.
      * @author Kyradjis
+     * @see EntityStateManager
+     * @see LivingEntity
      * @since 1.7.0
-     * @version 1.7.0
      */
-    default int getFlightCooldown() {
-        return 1;
+    default int getFlightCooldown(LivingEntity pEntity) {
+        return EntityStateManager.getFlyingCooldown(pEntity);
     }
 
     /**
@@ -134,14 +177,17 @@ public interface IFlyingEntity {
      * Purpose: Updates the amount of time (in seconds) the entity must wait before flying again.<br>
      * When: Invoked during gameplay or entity configuration.<br>
      * Where: Used in cooldown management logic.<br>
+     * Additional Info: The library does not enforce the cooldown period; it is up to the developer to manage flight cooldowns.<br>
      * </p>
      *
      * @param pFlightCooldown The flight cooldown period (in seconds) as an {@code int}.
      * @author Kyradjis
+     * @see EntityStateManager
+     * @see LivingEntity
      * @since 1.7.0
-     * @version 1.7.0
      */
-    default void setFlightCooldown(int pFlightCooldown) {
+    default void setFlightCooldown(LivingEntity pEntity, int pFlightCooldown) {
+        EntityStateManager.setFlyingCooldown(pEntity, pFlightCooldown);
     }
 
     /**
@@ -154,26 +200,12 @@ public interface IFlyingEntity {
      *
      * @return The current altitude (in blocks) of the entity as an {@code int}.
      * @author Kyradjis
+     * @see EntityStateManager
+     * @see LivingEntity
      * @since 1.7.0
-     * @version 1.7.0
      */
-    default int getAltitude() {
-        return 1;
-    }
-
-    /**
-     * Sets the current altitude of the entity.
-     * <p>
-     * Purpose: Updates the height of the entity above the ground (measured in blocks).<br>
-     * When: Invoked during gameplay or movement adjustments.<br>
-     * Where: Used in AI or movement logic for flying entities.<br>
-     * </p>
-     *
-     * @param pAltitude The current altitude (in blocks) of the entity as an {@code int}.
-     * @author Kyradjis
-     * @since 1.7.0
-     * @version 1.7.0
-     */
-    default void setAltitude(int pAltitude) {
+    default int getAltitude(LivingEntity pEntity) {
+        BlockPos blockPos = pEntity.getOnPos();
+        return blockPos.getY();
     }
 }

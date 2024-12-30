@@ -1,9 +1,9 @@
 // Copyright (c) BlueLib. Licensed under the MIT License.
 package software.bluelib.interfaces.entity;
 
+import java.util.UUID;
 import net.minecraft.world.entity.OwnableEntity;
 import net.minecraft.world.entity.player.Player;
-import java.util.UUID;
 
 /**
  * An interface for tamable entities in the BlueLib library.
@@ -29,11 +29,12 @@ import java.util.UUID;
  *
  * @author Kyradjis
  * @version 1.7.0
- * @since 1.7.0
  * @see OwnableEntity
  * @see Player
  * @see UUID
+ * @since 1.7.0
  */
+@SuppressWarnings("unused")
 public interface ITameableEntity extends OwnableEntity {
 
     /**
@@ -45,9 +46,8 @@ public interface ITameableEntity extends OwnableEntity {
      * </p>
      *
      * @return {@code true} if the entity is tamed; {@code false} otherwise.
-     * @since 1.7.0
-     * @version 1.7.0
      * @author Kyradjis
+     * @since 1.7.0
      */
     default boolean isTamed() {
         return false;
@@ -63,10 +63,9 @@ public interface ITameableEntity extends OwnableEntity {
      *
      * @param pPlayer The player to check ownership for.
      * @return {@code true} if the player owns the entity; {@code false} otherwise.
-     * @since 1.7.0
-     * @version 1.7.0
      * @author Kyradjis
      * @see Player#getUUID()
+     * @since 1.7.0
      */
     default boolean ownedBy(Player pPlayer) {
         UUID ownerUUID = this.getOwnerUUID();
@@ -82,16 +81,15 @@ public interface ITameableEntity extends OwnableEntity {
      * </p>
      *
      * @return {@code true} if changing ownership is allowed for the entity; {@code false} otherwise.
-     * @since 1.7.0
-     * @version 1.7.0
      * @author Kyradjis
+     * @since 1.7.0
      */
     default boolean getChangingOwner() {
         return false;
     }
 
     /**
-     * Sets the ownership transfer status of the entity.
+     * Sets the ownership transfers status of the entity.
      * <p>
      * Purpose: Updates the entity's state to indicate whether it is allowed to change ownership.<br>
      * When: Invoked during taming or trade operations.<br>
@@ -99,12 +97,10 @@ public interface ITameableEntity extends OwnableEntity {
      * </p>
      *
      * @param pChanging {@code true} to indicate ownership can be transferred; {@code false} otherwise.
-     * @since 1.7.0
-     * @version 1.7.0
      * @author Kyradjis
+     * @since 1.7.0
      */
-    default void setChangingOwner(boolean pChanging) {
-    }
+    default void setChangingOwner(boolean pChanging) {}
 
     /**
      * Gets the type of food required to tame the entity.
@@ -115,9 +111,8 @@ public interface ITameableEntity extends OwnableEntity {
      * </p>
      *
      * @return The name of the taming food as a {@link String}.
-     * @since 1.7.0
-     * @version 1.7.0
      * @author Kyradjis
+     * @since 1.7.0
      */
     default String getTamingFood() {
         return "Wheat";
@@ -132,12 +127,10 @@ public interface ITameableEntity extends OwnableEntity {
      * </p>
      *
      * @param pTamingFood The name of the taming food as a {@link String}.
-     * @since 1.7.0
-     * @version 1.7.0
      * @author Kyradjis
+     * @since 1.7.0
      */
-    default void setTamingFood(String pTamingFood) {
-    }
+    default void setTamingFood(String pTamingFood) {}
 
     /**
      * Checks if the entity is following its owner.
@@ -148,9 +141,8 @@ public interface ITameableEntity extends OwnableEntity {
      * </p>
      *
      * @return {@code true} if the entity should follow its owner; {@code false} otherwise.
-     * @since 1.7.0
-     * @version 1.7.0
      * @author Kyradjis
+     * @since 1.7.0
      */
     default boolean getFollowingStatus() {
         return false;
@@ -165,12 +157,10 @@ public interface ITameableEntity extends OwnableEntity {
      * </p>
      *
      * @param pFollowingStatus {@code true} to make the entity follow its owner; {@code false} otherwise.
-     * @since 1.7.0
-     * @version 1.7.0
      * @author Kyradjis
+     * @since 1.7.0
      */
-    default void setFollowingStatus(boolean pFollowingStatus) {
-    }
+    default void setFollowingStatus(boolean pFollowingStatus) {}
 
     /**
      * Gets the loyalty level of the entity.
@@ -180,9 +170,8 @@ public interface ITameableEntity extends OwnableEntity {
      * </p>
      *
      * @return The loyalty level as an {@code int}.
-     * @since 1.7.0
-     * @version 1.7.0
      * @author Kyradjis
+     * @since 1.7.0
      */
     default int getLoyaltyLevel() {
         return 1;
@@ -197,10 +186,8 @@ public interface ITameableEntity extends OwnableEntity {
      * </p>
      *
      * @param pLevel The loyalty level as an {@code int}.
-     * @since 1.7.0
-     * @version 1.7.0
      * @author Kyradjis
+     * @since 1.7.0
      */
-    default void setLoyaltyLevel(int pLevel) {
-    }
+    default void setLoyaltyLevel(int pLevel) {}
 }

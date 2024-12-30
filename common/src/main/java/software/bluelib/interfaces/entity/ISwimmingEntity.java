@@ -25,6 +25,7 @@ package software.bluelib.interfaces.entity;
  * @version 1.7.0
  * @since 1.7.0
  */
+@SuppressWarnings("unused")
 public interface ISwimmingEntity {
 
     /**
@@ -38,7 +39,6 @@ public interface ISwimmingEntity {
      * @return {@code true} if the entity is swimming; {@code false} otherwise.
      * @author Kyradjis
      * @since 1.7.0
-     * @version 1.7.0
      */
     default boolean getSwimmingState() {
         return false;
@@ -55,10 +55,8 @@ public interface ISwimmingEntity {
      * @param pSwimming {@code true} to set the entity as swimming; {@code false} otherwise.
      * @author Kyradjis
      * @since 1.7.0
-     * @version 1.7.0
      */
-    default void setSwimmingState(boolean pSwimming) {
-    }
+    default void setSwimmingState(boolean pSwimming) {}
 
     /**
      * Retrieves the swimming speed multiplier for the entity.
@@ -71,7 +69,6 @@ public interface ISwimmingEntity {
      * @return The swimming speed multiplier as a {@code double}.
      * @author Kyradjis
      * @since 1.7.0
-     * @version 1.7.0
      */
     default double getSwimmingSpeedMultiplier() {
         return 1.0;
@@ -88,10 +85,8 @@ public interface ISwimmingEntity {
      * @param pSwimmingSpeedMultiplier The swimming speed multiplier as a {@code double}.
      * @author Kyradjis
      * @since 1.7.0
-     * @version 1.7.0
      */
-    default void setSwimmingSpeedMultiplier(double pSwimmingSpeedMultiplier) {
-    }
+    default void setSwimmingSpeedMultiplier(double pSwimmingSpeedMultiplier) {}
 
     /**
      * Retrieves the cooldown period between dives for the entity.
@@ -99,12 +94,12 @@ public interface ISwimmingEntity {
      * Purpose: Indicates the amount of time (in seconds) the entity must wait before diving again.<br>
      * When: Called to check or enforce dive cooldown periods.<br>
      * Where: Used in AI or gameplay mechanics involving water interaction.<br>
+     * Additional Info: The library does not enforce the cooldown period; it is up to the developer to manage flight cooldowns.<br>
      * </p>
      *
      * @return The dive cooldown period (in seconds) as an {@code int}.
      * @author Kyradjis
      * @since 1.7.0
-     * @version 1.7.0
      */
     default int getDiveCooldown() {
         return 1;
@@ -116,15 +111,14 @@ public interface ISwimmingEntity {
      * Purpose: Updates the amount of time (in seconds) the entity must wait before diving again.<br>
      * When: Invoked during gameplay or AI behavior updates.<br>
      * Where: Used in dive cooldown management logic.<br>
+     * Additional Info: The library does not enforce the cooldown period; it is up to the developer to manage flight cooldowns.<br>
      * </p>
      *
      * @param pDiveCooldown The dive cooldown period (in seconds) as an {@code int}.
      * @author Kyradjis
      * @since 1.7.0
-     * @version 1.7.0
      */
-    default void setDiveCooldown(int pDiveCooldown) {
-    }
+    default void setDiveCooldown(int pDiveCooldown) {}
 
     /**
      * Retrieves the current depth of the entity.
@@ -137,7 +131,6 @@ public interface ISwimmingEntity {
      * @return The current depth (in blocks) of the entity as an {@code int}.
      * @author Kyradjis
      * @since 1.7.0
-     * @version 1.7.0
      */
     default int getDepth() {
         return 1;
@@ -154,8 +147,6 @@ public interface ISwimmingEntity {
      * @param pDepth The current depth (in blocks) of the entity as an {@code int}.
      * @author Kyradjis
      * @since 1.7.0
-     * @version 1.7.0
      */
-    default void setDepth(int pDepth) {
-    }
+    default void setDepth(int pDepth) {}
 }
