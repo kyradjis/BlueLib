@@ -43,6 +43,7 @@ public interface ISwimmingEntity {
      * Purpose: Determines whether the {@link LivingEntity} is in a swimming state.<br>
      * When: Invoked during interactions or checks involving swimming mechanics.<br>
      * Where: Used in AI and gameplay logic requiring swimming state validation.<br>
+     * Additional Info: The library does not enforce the swimming state; it is up to the developer to manage the swimming state.<br>
      * </p>
      *
      * @param pEntity The {@link LivingEntity} to check.
@@ -62,9 +63,10 @@ public interface ISwimmingEntity {
      * Purpose: Sets whether the {@link LivingEntity} is swimming.<br>
      * When: Called during gameplay events or interactions that affect swimming behavior.<br>
      * Where: Used to control swimming-related mechanics for entities.<br>
+     * Additional Info: The library does not enforce the swimming state; it is up to the developer to manage the swimming state.<br>
      * </p>
      *
-     * @param pEntity The {@link LivingEntity} whose swimming state is to be updated.
+     * @param pEntity   The {@link LivingEntity} whose swimming state is to be updated.
      * @param pSwimming {@code true} to set the entity as swimming; {@code false} otherwise.
      * @author Kyradjis
      * @see EntityStateManager
@@ -103,7 +105,7 @@ public interface ISwimmingEntity {
      * Additional Info: Throws an {@link IllegalStateException} if the entity lacks the required attribute.<br>
      * </p>
      *
-     * @param pEntity The {@link LivingEntity} whose swimming speed multiplier is to be updated.
+     * @param pEntity          The {@link LivingEntity} whose swimming speed multiplier is to be updated.
      * @param pSpeedMultiplier The swimming speed multiplier as a {@code double}.
      * @throws IllegalStateException If the entity does not have the swimming speed attribute.
      * @author Kyradjis
@@ -123,11 +125,50 @@ public interface ISwimmingEntity {
     }
 
     /**
+     * Checks if the entity is capable of swimming.
+     * <p>
+     * Purpose: Determines whether the entity has the ability to swim.<br>
+     * When: Called to validate the entity's swimming capabilities.<br>
+     * Where: Used in AI or interaction logic involving swimming.<br>
+     * Additional Info: The library does not enforce the swimming ability; it is up to the developer to manage the swimming abilities.<br>
+     * </p>
+     *
+     * @return {@code true} if the entity can swim; {@code false} otherwise (e.g., when the entity is a baby).
+     * @author Kyradjis
+     * @see EntityStateManager
+     * @see LivingEntity
+     * @since 1.7.0
+     */
+    default boolean canSwim(LivingEntity pEntity) {
+        return EntityStateManager.getCanSwim(pEntity);
+    }
+
+    /**
+     * Sets whether the entity can swim.
+     * <p>
+     * Purpose: Updates the entity's ability to swim.<br>
+     * When: Invoked during gameplay or entity configuration.<br>
+     * Where: Used in methods controlling swimming mechanics.<br>
+     * Additional Info: The library does not enforce the swimming ability; it is up to the developer to manage the swimming abilities.<br>
+     * </p>
+     *
+     * @param pCanSwim {@code true} to enable swimming for the entity; {@code false} otherwise.
+     * @author MeAlam
+     * @see EntityStateManager
+     * @see LivingEntity
+     * @since 1.7.0
+     */
+    default void canSwim(LivingEntity pEntity, boolean pCanSwim) {
+        EntityStateManager.setCanSwim(pEntity, pCanSwim);
+    }
+
+    /**
      * Retrieves the cooldown period for the entity's swimming behavior.
      * <p>
      * Purpose: Returns the cooldown duration that limits the entity's ability to swim.<br>
      * When: Invoked during checks or calculations involving swimming cooldowns.<br>
      * Where: Used in gameplay mechanics that manage swimming intervals.<br>
+     * Additional Info: The library does not enforce the Cooldown; it is up to the developer to manage the swimming cooldown.<br>
      * </p>
      *
      * @param pEntity The {@link LivingEntity} to check.
@@ -147,9 +188,10 @@ public interface ISwimmingEntity {
      * Purpose: Sets the cooldown duration that limits the entity's ability to swim.<br>
      * When: Called during interactions or events that modify swimming behavior.<br>
      * Where: Used to control swimming intervals for gameplay mechanics.<br>
+     * Additional Info: The library does not enforce the Cooldown; it is up to the developer to manage the swimming cooldown.<br>
      * </p>
      *
-     * @param pEntity The {@link LivingEntity} whose swimming cooldown period is to be updated.
+     * @param pEntity       The {@link LivingEntity} whose swimming cooldown period is to be updated.
      * @param pSwimCooldown The swimming cooldown period as an {@code int}.
      * @author Kyradjis
      * @see EntityStateManager

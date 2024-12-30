@@ -4,7 +4,7 @@ package software.bluelib.entity;
 import java.util.HashMap;
 import java.util.Map;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
+import software.bluelib.interfaces.entity.ITamableEntity;
 
 /**
  * Manages the state of entities in the BlueLib library.
@@ -15,7 +15,6 @@ import net.minecraft.world.entity.player.Player;
  * Additional Info: The class uses maps to store and retrieve the state information for entities.
  * </p>
  * Key Methods:
- * @author MeAlam
  * <ul>
  * <li>{@link #getFlyingState(LivingEntity)} - Retrieves the flying state of the entity.</li>
  * <li>{@link #setFlyingState(LivingEntity, boolean)} - Sets the flying state of the entity.</li>
@@ -23,19 +22,10 @@ import net.minecraft.world.entity.player.Player;
  * <li>{@link #setCanFly(LivingEntity, boolean)} - Sets whether the entity can fly.</li>
  * <li>{@link #getFlyingCooldown(LivingEntity)} - Retrieves the cooldown period between flights for the entity.</li>
  * <li>{@link #setFlyingCooldown(LivingEntity, int)} - Sets the cooldown period between flights for the entity.</li>
- * </ul>
- *
- * @author Kyradjis
- * <ul>
  * <li>{@link #getSwimmingState(LivingEntity)} - Retrieves the swimming state of the entity.</li>
  * <li>{@link #setSwimmingState(LivingEntity, boolean)} - Updates the swimming state of the entity.</li>
  * <li>{@link #getSwimmingCooldown(LivingEntity)} - Retrieves the swimming cooldown period of the entity.</li>
  * <li>{@link #setSwimmingCooldown(LivingEntity, int)} - Updates the swimming cooldown period of the entity.</li>
- * <li>{@link #getTamingState(LivingEntity)} - Retrieves the taming state of the entity.</li>
- * <li>{@link #setTamingState(LivingEntity, boolean)} - Updates the taming state of the entity.</li>
- * <li>{@link #getEntityOwner(LivingEntity)} - Retrieves the owner of the entity.</li>
- * <li>{@link #getOwnerTransferingState(LivingEntity)} - Retrieves the ownership transferring state of the entity.</li>
- * <li>{@link #setOwnerTransferingState(LivingEntity, boolean)} - Updates the ownership transferring state of the entity.</li>
  * <li>{@link #getTamingItem(LivingEntity)} - Retrieves the taming item associated with the entity.</li>
  * <li>{@link #setTamingItem(LivingEntity, String)} - Updates the taming item for the entity.</li>
  * <li>{@link #getFollowingState(LivingEntity)} - Retrieves the following state of the entity.</li>
@@ -44,10 +34,11 @@ import net.minecraft.world.entity.player.Player;
  * <li>{@link #setLoyaltyLevel(LivingEntity, int)} - Updates the loyalty level of the entity.</li>
  * </ul>
  *
+ * @author Kyradjis, MeAlam
  * @version 1.7.0
  * @see software.bluelib.interfaces.entity.IFlyingEntity
  * @see software.bluelib.interfaces.entity.ISwimmingEntity
- * @see software.bluelib.interfaces.entity.ITameableEntity
+ * @see ITamableEntity
  * @see LivingEntity
  * @see Boolean
  * @see HashMap
@@ -124,7 +115,7 @@ public class EntityStateManager {
         flyingStateMap.put(pEntity, pState);
     }
 
-    // Flying Speed Multipliers
+    // Can Fly
 
     /**
      * A map to store the flying capability of entities.
@@ -257,6 +248,7 @@ public class EntityStateManager {
     }
 
     // Swimming States
+
     /**
      * A map to store the swimming state of entities.
      * <p>
@@ -265,13 +257,14 @@ public class EntityStateManager {
      * Where: Used to manage and track the swimming state of entities in the system.<br>
      * Additional Info: The keys are {@link LivingEntity} instances, and the values are {@code Boolean} values representing their swimming state.
      * </p>
-     * @author Kyradjis
+     *
      * @see LivingEntity
      * @see Boolean
+     * @see Map
+     * @see HashMap
      * @since 1.7.0
      */
     private static final Map<LivingEntity, Boolean> swimmingStateMap = new HashMap<>();
-
 
     /**
      * Retrieves the swimming state of the specified entity.
@@ -293,7 +286,6 @@ public class EntityStateManager {
         return swimmingStateMap.getOrDefault(pEntity, false);
     }
 
-
     /**
      * Sets the swimming state for the specified entity.
      * <p>
@@ -314,6 +306,69 @@ public class EntityStateManager {
         swimmingStateMap.put(pEntity, pState);
     }
 
+    /**
+     * A map to store the swim capability of entities.
+     * <p>
+     * Purpose: This map holds the swim capability of entities.<br>
+     * When: The map is populated when the {@link #setCanSwim(LivingEntity, boolean)} method is called.<br>
+     * Where: The map is used to store the swim capability of entities.<br>
+     * Additional Info: The keys are the entities and the values are their swim capabilities.
+     * </p>
+     *
+     * @see Map
+     * @see HashMap
+     * @see LivingEntity
+     * @see Boolean
+     * @see #setCanSwim(LivingEntity, boolean)
+     * @see #getCanSwim(LivingEntity)
+     * @see software.bluelib.interfaces.entity.IFlyingEntity
+     * @since 1.7.0
+     */
+    private static final Map<LivingEntity, Boolean> canSwimMap = new HashMap<>();
+
+    /**
+     * Checks if the entity is capable of swim.
+     * <p>
+     * Purpose: Determines whether the entity has the ability to swim.<br>
+     * When: Called to validate the entity's swim capabilities.<br>
+     * Where: Used in AI or interaction logic involving swim.<br>
+     * </p>
+     *
+     * @param pEntity The entity to check the swim capability for.
+     * @return {@code true} if the entity can swim; {@code false} otherwise.
+     * @author MeAlam
+     * @see software.bluelib.interfaces.entity.IFlyingEntity
+     * @see LivingEntity
+     * @see Boolean
+     * @see #setCanSwim(LivingEntity, boolean)
+     * @see #canSwimMap
+     * @since 1.7.0
+     */
+    public static Boolean getCanSwim(LivingEntity pEntity) {
+        return canSwimMap.getOrDefault(pEntity, true);
+    }
+
+    /**
+     * Sets whether the entity can swim.
+     * <p>
+     * Purpose: Updates the entity's ability to swim.<br>
+     * When: Invoked during gameplay or entity configuration.<br>
+     * Where: Used in methods controlling swim mechanics.<br>
+     * </p>
+     *
+     * @param pEntity The entity to set the swim capability for.
+     * @param pCanFly {@code true} to enable swim for the entity; {@code false} otherwise.
+     * @author MeAlam
+     * @see software.bluelib.interfaces.entity.IFlyingEntity
+     * @see LivingEntity
+     * @see Boolean
+     * @see #getCanSwim(LivingEntity)
+     * @see #canSwimMap
+     * @since 1.7.0
+     */
+    public static void setCanSwim(LivingEntity pEntity, boolean pCanFly) {
+        canSwimMap.put(pEntity, pCanFly);
+    }
 
     // Swimming Cooldowns
     /**
@@ -325,13 +380,11 @@ public class EntityStateManager {
      * Additional Info: The keys are {@link LivingEntity} instances, and the values are {@code Integer} values representing the cooldown period in seconds.
      * </p>
      *
-     * @author Kyradjis
      * @see LivingEntity
      * @see Integer
      * @since 1.7.0
      */
     private static final Map<LivingEntity, Integer> swimmingCooldownMap = new HashMap<>();
-
 
     /**
      * Retrieves the swimming cooldown period for the specified entity.
@@ -353,7 +406,6 @@ public class EntityStateManager {
         return swimmingCooldownMap.getOrDefault(pEntity, 1);
     }
 
-
     /**
      * Sets the swimming cooldown period for the specified entity.
      * <p>
@@ -374,169 +426,6 @@ public class EntityStateManager {
         swimmingCooldownMap.put(pEntity, pCooldown);
     }
 
-
-    // Taming State
-    /**
-     * A map to store the taming state of entities.
-     * <p>
-     * Purpose: This map tracks whether entities have been tamed.<br>
-     * When: The map is populated or accessed when {@link #getTamingState(LivingEntity)} or {@link #setTamingState(LivingEntity, boolean)} is invoked.<br>
-     * Where: Used to manage and validate taming mechanics for entities.<br>
-     * Additional Info: The keys are {@link LivingEntity} instances, and the values are {@code Boolean} values indicating their taming state.
-     * </p>
-     *
-     * @author Kyradjis
-     * @see LivingEntity
-     * @see Boolean
-     * @since 1.7.0
-     */
-    private static final Map<LivingEntity, Boolean> tamingStateMap = new HashMap<>();
-
-
-    /**
-     * Retrieves the taming state of the specified entity.
-     * <p>
-     * Purpose: Determines whether the given {@link LivingEntity} has been tamed.<br>
-     * When: Invoked during checks or interactions involving the taming status of an entity.<br>
-     * Where: Used in gameplay systems or AI logic that depend on taming validation.<br>
-     * Additional Info: If no taming state is set for the entity, the method returns {@code false} by default.
-     * </p>
-     *
-     * @param pEntity The {@link LivingEntity} whose taming state is to be retrieved.
-     * @return {@code true} if the entity is tamed; {@code false} otherwise.
-     * @author Kyradjis
-     * @see #tamingStateMap
-     * @see LivingEntity
-     * @since 1.7.0
-     */
-    public static boolean getTamingState(LivingEntity pEntity) {
-        return tamingStateMap.getOrDefault(pEntity, false);
-    }
-
-
-    /**
-     * Sets the taming state for the specified entity.
-     * <p>
-     * Purpose: Updates the taming state of the given {@link LivingEntity}.<br>
-     * When: Called during interactions or events that modify the taming status of an entity.<br>
-     * Where: Used in gameplay systems to manage taming mechanics.<br>
-     * Additional Info: The taming state is stored in the {@link #tamingStateMap}.
-     * </p>
-     *
-     * @param pEntity The {@link LivingEntity} whose taming state is to be updated.
-     * @param pState  {@code true} to mark the entity as tamed; {@code false} otherwise.
-     * @author Kyradjis
-     * @see #tamingStateMap
-     * @see LivingEntity
-     * @since 1.7.0
-     */
-    public static void setTamingState(LivingEntity pEntity, boolean pState) {
-        tamingStateMap.put(pEntity, pState);
-    }
-
-
-    // Owner of Entity
-
-    /**
-     * A map to store the owner of entities.
-     * <p>
-     * Purpose: This map tracks the ownership of entities, associating each {@link LivingEntity} with its {@link Player} owner.<br>
-     * When: The map is populated or accessed when {@link #getEntityOwner(LivingEntity)} is invoked.<br>
-     * Where: Used to manage and validate ownership mechanics for entities.<br>
-     * Additional Info: The keys are {@link LivingEntity} instances, and the values are {@link Player} objects representing their owners.
-     * </p>
-     *
-     * @author Kyradjis
-     * @see LivingEntity
-     * @see Player
-     * @since 1.7.0
-     */
-    private static final Map<LivingEntity, Player> entityOwnerMap = new HashMap<>();
-
-
-    /**
-     * Retrieves the owner of the specified entity.
-     * <p>
-     * Purpose: Returns the {@link Player} who owns the given {@link LivingEntity}.<br>
-     * When: Called during interactions or gameplay that require validation or use of ownership information.<br>
-     * Where: Used in mechanics that depend on entity ownership.<br>
-     * Additional Info: If the entity does not have an owner, the method returns {@code null}.
-     * </p>
-     *
-     * @param pEntity The {@link LivingEntity} whose owner is to be retrieved.
-     * @return The {@link Player} who owns the entity, or {@code null} if no owner is set for the entity.
-     * @author Kyradjis
-     * @see #entityOwnerMap
-     * @see LivingEntity
-     * @see Player
-     * @since 1.7.0
-     */
-    public static Player getEntityOwner(LivingEntity pEntity) {
-        return entityOwnerMap.getOrDefault(pEntity, null);
-    }
-
-
-    // Ownership Transfering
-
-    /**
-     * A map to store the ownership transferring state of entities.
-     * <p>
-     * Purpose: This map tracks whether the ownership of a {@link LivingEntity} is currently being transferred.<br>
-     * When: The map is populated or accessed when {@link #getOwnerTransferingState(LivingEntity)} or {@link #setOwnerTransferingState(LivingEntity, boolean)} is invoked.<br>
-     * Where: Used to manage and validate ownership transfer mechanics for entities.<br>
-     * Additional Info: The keys are {@link LivingEntity} instances, and the values are {@code Boolean} values indicating the ownership transferring state.
-     * </p>
-     *
-     * @author Kyradjis
-     * @see LivingEntity
-     * @see Boolean
-     * @since 1.7.0
-     */
-    private static final Map<LivingEntity, Boolean> ownershipTransferingMap = new HashMap<>();
-
-
-    /**
-     * Retrieves the ownership transferring state of the specified entity.
-     * <p>
-     * Purpose: Determines whether the ownership of the given {@link LivingEntity} is currently being transferred.<br>
-     * When: Invoked during checks or interactions that require validation of ownership transfer state.<br>
-     * Where: Used in gameplay mechanics involving ownership changes.<br>
-     * Additional Info: If no state is set for the entity, the method returns {@code false} by default.
-     * </p>
-     *
-     * @param pEntity The {@link LivingEntity} whose ownership transferring state is to be retrieved.
-     * @return {@code true} if the entity is in the process of ownership transfer; {@code false} otherwise.
-     * @author Kyradjis
-     * @see #ownershipTransferingMap
-     * @see LivingEntity
-     * @since 1.7.0
-     */
-    public static boolean getOwnerTransferingState(LivingEntity pEntity) {
-        return ownershipTransferingMap.getOrDefault(pEntity, false);
-    }
-
-
-    /**
-     * Sets the ownership transferring state for the specified entity.
-     * <p>
-     * Purpose: Updates whether the ownership of the given {@link LivingEntity} is currently being transferred.<br>
-     * When: Called during gameplay events or interactions that modify the ownership transferring state of an entity.<br>
-     * Where: Used to manage mechanics related to ownership changes.<br>
-     * Additional Info: The transferring state is stored in the {@link #ownershipTransferingMap}.
-     * </p>
-     *
-     * @param pEntity The {@link LivingEntity} whose ownership transferring state is to be updated.
-     * @param pState  {@code true} to mark the entity as in the process of ownership transfer; {@code false} otherwise.
-     * @author Kyradjis
-     * @see #ownershipTransferingMap
-     * @see LivingEntity
-     * @since 1.7.0
-     */
-    public static void setOwnerTransferingState(LivingEntity pEntity, boolean pState) {
-        ownershipTransferingMap.put(pEntity, pState);
-    }
-
-
     // Taming Item
 
     /**
@@ -548,13 +437,11 @@ public class EntityStateManager {
      * Additional Info: The keys are {@link LivingEntity} instances, and the values are {@link String} objects representing the taming items.
      * </p>
      *
-     * @author Kyradjis
      * @see LivingEntity
      * @see String
      * @since 1.7.0
      */
     private static final Map<LivingEntity, String> tamingItemMap = new HashMap<>();
-
 
     /**
      * Retrieves the taming item associated with the specified entity.
@@ -577,7 +464,6 @@ public class EntityStateManager {
         return tamingItemMap.getOrDefault(pEntity, null);
     }
 
-
     /**
      * Sets the taming item for the specified entity.
      * <p>
@@ -599,7 +485,6 @@ public class EntityStateManager {
         tamingItemMap.put(pEntity, pItem);
     }
 
-
     // Owner Following
 
     /**
@@ -611,13 +496,11 @@ public class EntityStateManager {
      * Additional Info: The keys are {@link LivingEntity} instances, and the values are {@code Boolean} values representing their following state.
      * </p>
      *
-     * @author Kyradjis
      * @see LivingEntity
      * @see Boolean
      * @since 1.7.0
      */
     private static final Map<LivingEntity, Boolean> ownerFollowingStateMap = new HashMap<>();
-
 
     /**
      * Retrieves the owner-following state of the specified entity.
@@ -639,7 +522,6 @@ public class EntityStateManager {
         return ownerFollowingStateMap.getOrDefault(pEntity, false);
     }
 
-
     /**
      * Sets the owner-following state for the specified entity.
      * <p>
@@ -660,7 +542,6 @@ public class EntityStateManager {
         ownerFollowingStateMap.put(pEntity, pState);
     }
 
-
     // Loyalty Level
     /**
      * A map to store the loyalty levels of entities.
@@ -671,13 +552,11 @@ public class EntityStateManager {
      * Additional Info: The keys are {@link LivingEntity} instances, and the values are {@code Integer} values representing their loyalty level.
      * </p>
      *
-     * @author Kyradjis
      * @see LivingEntity
      * @see Integer
      * @since 1.7.0
      */
     private static final Map<LivingEntity, Integer> loyaltyLevelMap = new HashMap<>();
-
 
     /**
      * Retrieves the loyalty level of the specified entity.
@@ -699,7 +578,6 @@ public class EntityStateManager {
         return loyaltyLevelMap.getOrDefault(pEntity, 5);
     }
 
-
     /**
      * Sets the loyalty level for the specified entity.
      * <p>
@@ -719,5 +597,4 @@ public class EntityStateManager {
     public static void setLoyaltyLevel(LivingEntity pEntity, int pLevel) {
         loyaltyLevelMap.put(pEntity, pLevel);
     }
-
 }

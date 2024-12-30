@@ -44,6 +44,7 @@ public interface IFlyingEntity {
      * Purpose: Indicates whether the entity is currently flying.<br>
      * When: Called to check the entity's current flight status.<br>
      * Where: Used in interaction logic for flying behavior.<br>
+     * Additional Info: The library does not enforce the flying state; it is up to the developer to manage the flying state.<br>
      * </p>
      *
      * @return {@code true} if the entity is flying; {@code false} otherwise.
@@ -61,6 +62,7 @@ public interface IFlyingEntity {
      * Purpose: Updates the entity's state to indicate whether it is flying.<br>
      * When: Invoked during gameplay or AI behavior changes.<br>
      * Where: Used in methods controlling flight mechanics.<br>
+     * Additional Info: The library does not enforce the flying state; it is up to the developer to manage the flying state.<br>
      * </p>
      *
      * @param pFlying {@code true} to set the entity as flying; {@code false} otherwise.
@@ -122,9 +124,10 @@ public interface IFlyingEntity {
      * Purpose: Determines whether the entity has the ability to fly.<br>
      * When: Called to validate the entity's flight capabilities.<br>
      * Where: Used in AI or interaction logic involving flight.<br>
+     * Additional Info: The library does not enforce the flying ability; it is up to the developer to manage the flying ability.<br>
      * </p>
      *
-     * @return {@code true} if the entity can fly; {@code false} otherwise (e.g. when the entity is a baby).
+     * @return {@code true} if the entity can fly; {@code false} otherwise (e.g., when the entity is a baby).
      * @author Kyradjis
      * @see EntityStateManager
      * @see LivingEntity
@@ -140,6 +143,7 @@ public interface IFlyingEntity {
      * Purpose: Updates the entity's ability to fly.<br>
      * When: Invoked during gameplay or entity configuration.<br>
      * Where: Used in methods controlling flight mechanics.<br>
+     * Additional Info: The library does not enforce the flying ability; it is up to the developer to manage the flying ability.<br>
      * </p>
      *
      * @param pCanFly {@code true} to enable flight for the entity; {@code false} otherwise.
