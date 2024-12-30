@@ -1,3 +1,4 @@
+// Copyright (c) BlueLib. Licensed under the MIT License.
 package software.bluelib.entity;
 
 import java.util.HashMap;
