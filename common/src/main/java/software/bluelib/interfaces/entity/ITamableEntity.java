@@ -94,7 +94,7 @@ public interface ITamableEntity {
      * @see LivingEntity
      * @since 1.7.0
      */
-    default String getTamingItem(LivingEntity pEntity) {
+    default Item getTamingItem(LivingEntity pEntity) {
         return EntityStateManager.getTamingItem(pEntity);
     }
 
