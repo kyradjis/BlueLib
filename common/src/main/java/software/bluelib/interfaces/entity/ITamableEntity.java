@@ -5,6 +5,9 @@ import java.util.UUID;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.OwnableEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import software.bluelib.entity.EntityStateManager;
 
 /**
@@ -72,7 +75,7 @@ public interface ITamableEntity {
      * @see Player#getUUID()
      * @since 1.7.0
      */
-    default boolean ownedBy(OwnableEntity pEntity, Player pPlayer) {
+    default boolean isOwnedBy(OwnableEntity pEntity, Player pPlayer) {
         UUID ownerUUID = pEntity.getOwnerUUID();
         return ownerUUID != null && ownerUUID.equals(pPlayer.getUUID());
     }
@@ -114,7 +117,7 @@ public interface ITamableEntity {
      * @see String
      * @since 1.7.0
      */
-    default void setTamingItem(LivingEntity pEntity, String pItem) {
+    default void setTamingItem(LivingEntity pEntity, Item pItem) {
         EntityStateManager.setTamingItem(pEntity, pItem);
     }
 

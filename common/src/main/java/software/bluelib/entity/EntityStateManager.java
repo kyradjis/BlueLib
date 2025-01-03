@@ -4,6 +4,7 @@ package software.bluelib.entity;
 import java.util.HashMap;
 import java.util.Map;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Item;
 import software.bluelib.interfaces.entity.ITamableEntity;
 
 /**
@@ -27,7 +28,7 @@ import software.bluelib.interfaces.entity.ITamableEntity;
  * <li>{@link #getSwimmingCooldown(LivingEntity)} - Retrieves the swimming cooldown period of the entity.</li>
  * <li>{@link #setSwimmingCooldown(LivingEntity, int)} - Updates the swimming cooldown period of the entity.</li>
  * <li>{@link #getTamingItem(LivingEntity)} - Retrieves the taming item associated with the entity.</li>
- * <li>{@link #setTamingItem(LivingEntity, String)} - Updates the taming item for the entity.</li>
+ * <li>{@link #setTamingItem(LivingEntity, Item)} - Updates the taming item for the entity.</li>
  * <li>{@link #getFollowingState(LivingEntity)} - Retrieves the following state of the entity.</li>
  * <li>{@link #setFollowingState(LivingEntity, boolean)} - Updates the following state of the entity.</li>
  * <li>{@link #getLoyaltyLevel(LivingEntity)} - Retrieves the loyalty level of the entity.</li>
@@ -432,16 +433,16 @@ public class EntityStateManager {
      * A map to store the taming item associated with entities.
      * <p>
      * Purpose: This map tracks the specific taming item required for each {@link LivingEntity}.<br>
-     * When: The map is populated or accessed when {@link #getTamingItem(LivingEntity)} or {@link #setTamingItem(LivingEntity, String)} is invoked.<br>
+     * When: The map is populated or accessed when {@link #getTamingItem(LivingEntity)} or {@link #setTamingItem(LivingEntity, Item)} is invoked.<br>
      * Where: Used to manage and validate taming mechanics based on specific items.<br>
-     * Additional Info: The keys are {@link LivingEntity} instances, and the values are {@link String} objects representing the taming items.
+     * Additional Info: The keys are {@link LivingEntity} instances, and the values are the taming items.
      * </p>
      *
      * @see LivingEntity
      * @see String
      * @since 1.7.0
      */
-    private static final Map<LivingEntity, String> tamingItemMap = new HashMap<>();
+    private static final Map<LivingEntity, Item> tamingItemMap = new HashMap<>();
 
     /**
      * Retrieves the taming item associated with the specified entity.
@@ -453,14 +454,14 @@ public class EntityStateManager {
      * </p>
      *
      * @param pEntity The {@link LivingEntity} whose taming item is to be retrieved.
-     * @return The taming item as a {@link String}, or {@code null} if no item is set for the entity.
+     * @return The taming item.
      * @author Kyradjis
      * @see #tamingItemMap
      * @see LivingEntity
      * @see String
      * @since 1.7.0
      */
-    public static String getTamingItem(LivingEntity pEntity) {
+    public static Item getTamingItem(LivingEntity pEntity) {
         return tamingItemMap.getOrDefault(pEntity, null);
     }
 
@@ -474,14 +475,14 @@ public class EntityStateManager {
      * </p>
      *
      * @param pEntity The {@link LivingEntity} whose taming item is to be set.
-     * @param pItem   The taming item as a {@link String} to associate with the entity.
+     * @param pItem   The taming item.
      * @author Kyradjis
      * @see #tamingItemMap
      * @see LivingEntity
      * @see String
      * @since 1.7.0
      */
-    public static void setTamingItem(LivingEntity pEntity, String pItem) {
+    public static void setTamingItem(LivingEntity pEntity, Item pItem) {
         tamingItemMap.put(pEntity, pItem);
     }
 
